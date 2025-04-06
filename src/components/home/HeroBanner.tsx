@@ -5,7 +5,7 @@ import bottle5l from "../../assets/images/poducts/bottle-5l.png";
 import bottle1l from "../../assets/images/poducts/bottle-1l.png";
 import bottle105 from "../../assets/images/poducts/bottle-0.5l.png";
 import arrowright from "../../assets/icons/Arrow-right.svg";
-import arrowleft from "../../assets/icons/arrow-left.svg";
+import arrowleft from "../../assets/icons/Arrow-left.svg";
 import { cn } from "../../lib/utils";
 
 const slides = [
