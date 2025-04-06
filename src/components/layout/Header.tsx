@@ -1,22 +1,19 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "../../features/cart/hooks/useCart";
+import logo from "../../assets/images/brands/LogoAS.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cartItemsCount } = useCart();
 
   return (
-    <header className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-3">
+    <header className=" ">
+      <div className="mx-auto  py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img
-              src="/src/assets/images/logo.svg"
-              alt="Saiss Logo"
-              className="h-10"
-            />
+            <img src={logo} alt="Saiss Logo" className="h-16" />
           </Link>
 
           {/* Navigation - Desktop */}
@@ -28,22 +25,16 @@ const Header = () => {
               Nos Produits
             </Link>
             <Link
-              to="/products/category/large-bottles"
+              to="/abonnment"
               className="text-gray-700 hover:text-primary transition-colors"
             >
-              Catégories
+              Abonnement
             </Link>
             <Link
-              to="/blog"
+              to="/contact"
               className="text-gray-700 hover:text-primary transition-colors"
             >
-              Nos Actualités
-            </Link>
-            <Link
-              to="/about"
-              className="text-gray-700 hover:text-primary transition-colors"
-            >
-              À propos
+              Nous Contacter
             </Link>
           </nav>
 

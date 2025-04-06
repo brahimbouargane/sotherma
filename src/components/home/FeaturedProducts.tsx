@@ -35,12 +35,12 @@ const FeaturedProducts = () => {
 
   return (
     <section className="py-12 bg-gray-50">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-800">Notre sélection</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {/* Feature Product Card */}
           <div className="bg-primary bg-opacity-10 rounded-2xl overflow-hidden shadow-card p-6 flex flex-col justify-between">
             <div>
@@ -96,7 +96,7 @@ const FeaturedProducts = () => {
                 <button
                   onClick={() => handleAddToCart(product)}
                   disabled={isAddingToCart === product.id}
-                  className="w-full bg-primary text-white rounded-lg py-2 text-sm font-medium hover:bg-primary-dark transition-colors flex items-center justify-center"
+                  className="w-full bg-blue-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-primary-dark transition-colors flex items-center justify-center"
                 >
                   {isAddingToCart === product.id ? (
                     <svg

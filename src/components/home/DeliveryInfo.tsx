@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 const DeliveryInfo = () => {
   return (
     <section className="py-12 bg-primary">
-      <div className="container mx-auto px-4">
+      <div className="mx-auto">
         <div className="flex flex-col md:flex-row items-center">
           {/* Image */}
           <div className="md:w-1/2 mb-8 md:mb-0">

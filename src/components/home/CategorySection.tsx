@@ -1,8 +1,14 @@
-import { Link } from "@tanstack/react-router";
+// import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import category1 from "../../assets/images/category/category-farme-1.png";
+import category2 from "../../assets/images/category/category-farme-2.png";
+import category3 from "../../assets/images/category/category-farme-3.png";
+import category4 from "../../assets/images/category/category-farme-4.png";
 
 // Define category types
 interface Category {
-  id: string;
+  id: number;
   title: string;
   image: string;
   link: string;
@@ -12,113 +18,114 @@ const CategorySection = () => {
   // Sample categories based on the design
   const categories: Category[] = [
     {
-      id: "large-bottles",
+      id: 1,
       title: "Les grandes bouteilles",
-      image: "/src/assets/images/categories/large-bottles.jpg",
-      link: "/products/category/large-bottles",
+      image: category1,
+      link: "/categories/grandes-bouteilles",
     },
     {
-      id: "flavored-water",
+      id: 2,
       title: "Eau Aromatisée",
-      image: "/src/assets/images/categories/flavored-water.jpg",
-      link: "/products/category/flavored-water",
+      image: category2,
+      link: "/categories/eau-aromatisee",
     },
     {
-      id: "fountains",
-      title: "Les fontaines / Bidons",
-      image: "/src/assets/images/categories/water-fountains.jpg",
-      link: "/products/category/fountains",
+      id: 3,
+      title: "Les fontaines BIONS",
+      image: category3,
+      link: "/categories/fontaines",
     },
     {
-      id: "small-bottles",
+      id: 4,
       title: "Les petites bouteilles",
-      image: "/src/assets/images/categories/small-bottles.jpg",
-      link: "/products/category/small-bottles",
+      image: category4,
+      link: "/categories/petites-bouteilles",
     },
   ];
 
+  const [startIndex, setStartIndex] = useState(0);
+  const visibleCategories = 4;
+
+  const nextCategories = () => {
+    setStartIndex((prev) =>
+      Math.min(prev + 1, categories.length - visibleCategories)
+    );
+  };
+
+  const prevCategories = () => {
+    setStartIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
   return (
     <section className="py-12 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+      <div className=" mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-[52px] font-medium text-blue-700">
             Découvrez nos catégories
           </h2>
 
-          {/* Navigation arrows */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-12">
             <button
-              className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors"
-              aria-label="Previous category"
+              onClick={prevCategories}
+              disabled={startIndex === 0}
+              className="p-2 rounded-full   "
+              aria-label="Previous categories"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              {/* <ChevronLeft className="h-5 w-5 text-blue-700" /> */}
+              {/* <img src={arrowleft} alt="Arrow Left" className="h-12 w-10" /> */}
             </button>
+
             <button
-              className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors"
-              aria-label="Next category"
+              onClick={nextCategories}
+              disabled={startIndex >= categories.length - visibleCategories}
+              className="p-2 rounded-full   "
+              aria-label="Next categories"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              {/* <ChevronRight className="h-12 w-10 text-blue-700" /> */}
+              {/* <img src={arrowright} alt="Arrow Right" className="h-12 w-10" /> */}
             </button>
           </div>
         </div>
 
-        {/* Category Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           {categories.map((category) => (
-            <Link
-              to={category.link}
+            <motion.div
               key={category.id}
-              className="rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow group"
+              className="relative cursor-pointer rounded-xl overflow-hidden bg-blue-50 aspect-[3/4]"
+              variants={item}
             >
-              <div className="aspect-square relative overflow-hidden">
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <h3 className="absolute bottom-4 left-4 text-white text-xl font-medium">
-                  {category.title}
-                </h3>
-              </div>
-            </Link>
+              <img
+                src={category.image || "/placeholder.svg"}
+                alt={category.title}
+                className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
+              />
+            </motion.div>
           ))}
-        </div>
-
-        {/* View All Products Button */}
-        <div className="mt-8 text-center">
-          <Link
-            to="/products"
-            className="bg-primary text-white font-medium py-2 px-6 rounded-full hover:bg-primary-dark transition-colors"
-          >
+        </motion.div>
+        <div className="mt-16 text-center">
+          <button className="bg-blue-500 text-white rounded-full hover:bg-primary/80 text-2xl font-semibold px-6 py-4">
             Tous les produits
-          </Link>
+          </button>
         </div>
       </div>
     </section>
