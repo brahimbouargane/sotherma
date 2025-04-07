@@ -1,4 +1,9 @@
 import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import blog1 from "../../assets/images/blog/blog-1.png";
+import blog2 from "../../assets/images/blog/blog-2.png";
+import blog3 from "../../assets/images/blog/blog-3.png";
+import Right from "../../assets/icons/Chevron Right.svg";
 
 // BlogPost type definition
 interface BlogPost {
@@ -10,6 +15,20 @@ interface BlogPost {
   date: string;
   link: string;
 }
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
 
 const BlogPreview = () => {
   // Sample blog posts based on the design
@@ -19,7 +38,7 @@ const BlogPreview = () => {
       title: "Blog title heading will go here neatly spanning over two lines",
       excerpt:
         "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
-      image: "/src/assets/images/blog/post-1.jpg",
+      image: blog1,
       category: "Lifestyle",
       date: "5 mai 2023",
       link: "/blog/post-1",
@@ -29,7 +48,7 @@ const BlogPreview = () => {
       title: "Blog title heading will go here neatly spanning over two lines",
       excerpt:
         "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
-      image: "/src/assets/images/blog/post-2.jpg",
+      image: blog2,
       category: "Santé",
       date: "3 mai 2023",
       link: "/blog/post-2",
@@ -39,7 +58,7 @@ const BlogPreview = () => {
       title: "Blog title heading will go here neatly spanning over two lines",
       excerpt:
         "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
-      image: "/src/assets/images/blog/post-3.jpg",
+      image: blog3,
       category: "Sports",
       date: "1 mai 2023",
       link: "/blog/post-3",
@@ -47,64 +66,80 @@ const BlogPreview = () => {
   ];
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 ">
       <div className="mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-10 text-center">
+        <motion.h2
+          className="text-2xl md:text-5xl font-normal text-blue-700 text-center mb-2"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           Nos dernières actualités
-        </h2>
+        </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {blogPosts.map((post) => (
-            <Link
-              key={post.id}
-              to={post.link}
-              className="bg-white rounded-lg overflow-hidden shadow-card hover:shadow-card-hover transition-shadow"
+        <motion.p
+          className="text-gray-500 text-center mb-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          Restez informé de nos dernières nouvelles et événements
+        </motion.p>
+
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 px-12"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
+          {blogPosts.map((article) => (
+            <motion.article
+              key={article.id}
+              className="bg-white border border-blue-500 rounded-3xl overflow-hidden shadow-sm"
+              variants={item}
             >
-              <div className="aspect-video overflow-hidden">
+              <Link to={article.link} className="block">
                 <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  src={article.image || "/placeholder.svg"}
+                  alt={article.title}
+                  className="object-fill w-full h-72"
                 />
-              </div>
+              </Link>
+
               <div className="p-5">
-                <div className="flex items-center text-sm text-gray-500 mb-2">
-                  <span>{post.category}</span>
-                  <span className="mx-2">•</span>
-                  <span>{post.date}</span>
+                <div className="flex font-semibold items-center text-xs text-gray-500 mb-3">
+                  <span className="mr-3 bg-[#E0F4FC] px-4 py-2 rounded-full text-blue-700">
+                    {article.category}
+                  </span>
+                  <span className="font-sans">{article.date}</span>
                 </div>
-                <h3 className="font-bold text-gray-800 mb-2 line-clamp-2">
-                  {post.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {post.excerpt}
-                </p>
-                <span className="text-primary font-medium text-sm inline-flex items-center">
+
+                <Link to={article.link} className="block">
+                  <h3 className="text-lg font-medium text-blue-600 mb-2 hover:text-blue-700 transition-colors">
+                    {article.title}
+                  </h3>
+                </Link>
+
+                <p className="text-gray-600 text-sm mb-4">{article.excerpt}</p>
+
+                <Link
+                  to={article.link}
+                  className="text-blue-400 text-sm font-medium hover:text-blue-800 inline-flex items-center justify-center"
+                >
                   Read more
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 ml-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </span>
+                  <img src={Right} alt="Right Arrow" className="ml-2 h-5" />
+                </Link>
               </div>
-            </Link>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
 
         <div className="mt-8 text-center">
           <Link
             to="/blog"
-            className="inline-block bg-white border border-primary text-primary font-medium py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors"
+            className="inline-block text-white bg-blue-500 border border-primary text-primary font-medium py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors"
           >
             Tous les articles
           </Link>

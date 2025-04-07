@@ -16,6 +16,7 @@ import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import AbonnementPage from "./pages/Abonnement";
 
 // Create a context for the router
 type RouterContext = {
@@ -40,8 +41,14 @@ const indexRoute = new Route({
 
 const productsRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: "products",
+  path: "produits",
   component: ProductsPage,
+});
+
+const abonnementRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "abonnement",
+  component: AbonnementPage,
 });
 
 const productsByCategoryRoute = new Route({
@@ -110,6 +117,7 @@ const routeTree = rootRoute.addChildren([
   aboutRoute,
   blogRoute,
   blogPostRoute,
+  abonnementRoute,
   notFoundRoute,
 ]);
 

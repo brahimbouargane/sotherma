@@ -5,6 +5,8 @@ import category1 from "../../assets/images/category/category-farme-1.png";
 import category2 from "../../assets/images/category/category-farme-2.png";
 import category3 from "../../assets/images/category/category-farme-3.png";
 import category4 from "../../assets/images/category/category-farme-4.png";
+import arrowright from "../../assets/icons/Arrow-right.svg";
+import arrowleft from "../../assets/icons/Arrow-left.svg";
 
 // Define category types
 interface Category {
@@ -85,8 +87,7 @@ const CategorySection = () => {
               className="p-2 rounded-full   "
               aria-label="Previous categories"
             >
-              {/* <ChevronLeft className="h-5 w-5 text-blue-700" /> */}
-              {/* <img src={arrowleft} alt="Arrow Left" className="h-12 w-10" /> */}
+              <img src={arrowleft} alt="Arrow Left" className="h-12 w-10" />
             </button>
 
             <button
@@ -95,8 +96,7 @@ const CategorySection = () => {
               className="p-2 rounded-full   "
               aria-label="Next categories"
             >
-              {/* <ChevronRight className="h-12 w-10 text-blue-700" /> */}
-              {/* <img src={arrowright} alt="Arrow Right" className="h-12 w-10" /> */}
+              <img src={arrowright} alt="Arrow Right" className="h-12 w-10" />
             </button>
           </div>
         </div>
@@ -111,7 +111,7 @@ const CategorySection = () => {
           {categories.map((category) => (
             <motion.div
               key={category.id}
-              className="relative cursor-pointer rounded-xl overflow-hidden bg-blue-50 aspect-[3/4]"
+              className="relative cursor-pointer rounded-3xl overflow-hidden bg-blue-50 aspect-[3/4]"
               variants={item}
             >
               <img

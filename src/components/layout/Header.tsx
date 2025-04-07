@@ -19,20 +19,20 @@ const Header = () => {
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link
-              to="/products"
-              className="text-gray-700 hover:text-primary transition-colors"
+              to="/produits"
+              className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
             >
               Nos Produits
             </Link>
             <Link
-              to="/abonnment"
-              className="text-gray-700 hover:text-primary transition-colors"
+              to="/abonnement"
+              className=" text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
             >
               Abonnement
             </Link>
             <Link
               to="/contact"
-              className="text-gray-700 hover:text-primary transition-colors"
+              className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
             >
               Nous Contacter
             </Link>
@@ -44,7 +44,7 @@ const Header = () => {
             <Link to="/cart" className="relative p-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-700"
+                className="h-6 w-6 text-[#37AFE1] hover:text-blue-800 transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -67,7 +67,7 @@ const Header = () => {
             <div className="hidden md:block">
               <Link
                 to="/login"
-                className="text-sm text-primary hover:text-primary-dark transition-colors"
+                className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
               >
                 Log in / Sign up
               </Link>

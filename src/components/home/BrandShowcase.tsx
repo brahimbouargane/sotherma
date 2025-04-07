@@ -1,4 +1,9 @@
 import React from "react";
+import saislogo from "../../assets/images/brands/ainsaiss-logo.png";
+import sidihrazamlogo from "../../assets/images/brands/sidihrazam-logo.png";
+import ghaytlogo from "../../assets/images/brands/ghayt-logo.png";
+import { motion } from "framer-motion";
+import { cn } from "../../lib/utils";
 
 // Brand type definition
 interface Brand {
@@ -8,71 +13,103 @@ interface Brand {
   description: string;
 }
 
-const BrandShowcase: React.FC = () => {
+// Props type definition
+interface BrandShowcaseProps {
+  className?: string;
+  titleClassName?: string;
+  textClassName?: string;
+  containerClassName?: string;
+}
+
+const BrandShowcase: React.FC<BrandShowcaseProps> = ({
+  className,
+  titleClassName,
+  textClassName,
+  containerClassName,
+}) => {
   // Sample brands based on the design
   const brands: Brand[] = [
     {
       id: "sidi-harazem",
       name: "Sidi Harazem",
-      logo: "/src/assets/images/brands/sidi-harazem.png",
+      logo: sidihrazamlogo,
       description:
         "Une eau minérale naturelle reconnue pour sa pureté exceptionnelle et ses propriétés bénéfiques.",
     },
     {
       id: "ain-saiss",
       name: "Ain Saiss",
-      logo: "/src/assets/images/brands/ain-saiss.png",
+      logo: saislogo,
       description:
         "L'eau minérale naturelle idéale pour une hydratation quotidienne, riche en minéraux essentiels.",
     },
     {
-      id: "amanzi",
-      name: "Amanzi",
-      logo: "/src/assets/images/brands/amanzi.png",
+      id: "ghayt",
+      name: "Ghayt",
+      logo: ghaytlogo,
       description:
         "Une eau de source fraîche et légère, parfaite pour toute la famille et tous les moments de la journée.",
     },
   ];
 
   return (
-    <section className="py-12 bg-white">
-      <div className="mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-10">
+    <section className={cn("py-16 bg-[#EEF4F9] rounded-3xl", className)}>
+      <div className={cn("mx-auto", containerClassName)}>
+        <motion.h2
+          className={cn(
+            "text-2xl md:text-6xl font-normal text-blue-700 text-center mb-12",
+            titleClassName
+          )}
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
           Découvrez nos Marques
-        </h2>
+        </motion.h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {brands.map((brand) => (
-            <div key={brand.id} className="flex flex-col items-center">
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-64 mb-12">
+          {brands.map((brand, index) => (
+            <motion.div
+              key={brand.id}
+              className="w-32 md:w-64"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
               <img
-                src={brand.logo}
+                src={brand.logo || "/placeholder.svg"}
                 alt={brand.name}
-                className="h-24 object-contain mb-6"
+                width={150}
+                height={80}
+                className="w-full h-auto"
               />
-              <p className="text-center text-gray-600 max-w-xs">
-                {brand.description}
-              </p>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Placeholder text as shown in the design */}
-        <div className="mt-12 text-center text-gray-500 text-sm max-w-4xl mx-auto">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit, in pharetra
-            neque viverra mi sed pellentesque. Vulputate id morbi egestas tellus
-            non vestibulum tempus augue vestibulum in. Sed vulputate vitae non
-            vestibulum tempus augue vestibulum in sed vulputate vitae non
-            vestibulum.
-          </p>
-          <p className="mt-4">
-            Vulputate id morbi egestas tellus non vestibulum tempus augue
-            vestibulum in. Sed vulputate vitae non vestibulum tempus augue
-            vestibulum in sed vulputate vitae non vestibulum. Lorem ipsum dolor
-            sit amet consectetur adipiscing elit, in pharetra neque viverra mi
-            sed pellentesque. Vulputate id morbi egestas tellus non vestibulum.
-          </p>
-        </div>
+        <motion.p
+          className={cn(
+            "text-gray-500 text-center max-w-5xl mx-auto text-base md:text-lg",
+            textClassName
+          )}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+        >
+          Lorem ipsum dolor sit amet consectetur. In pharetra neque viverra mi
+          sed pellentesque. Vulputate at morbi egestas lacus. Egestas risus non
+          non vestibulum sagittis vestibulum in. Sed vulputate vitae id nunc
+          quisque pellentesque viverra laoreet.Lorem ipsum dolor sit amet
+          consectetur. In pharetra neque viverra mi sed pellentesque. Vulputate
+          at morbi egestas lacus. Egestas risus non non vestibulum sagittis
+          vestibulum in. Sed vulputate vitae id nunc quisque pellentesque
+          viverra laoreet.Lorem ipsum dolor sit amet consectetur. In pharetra
+          neque viverra mi sed pellentesque. Vulputate at morbi egestas lacus.
+          Egestas risus non non vestibulum sagittis vestibulum in. Sed vulputate
+          vitae id nunc quisque pellentesque viverra laoreet.
+        </motion.p>
       </div>
     </section>
   );
