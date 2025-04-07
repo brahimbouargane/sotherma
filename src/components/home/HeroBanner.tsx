@@ -77,7 +77,7 @@ const HeroBanner = () => {
         <img
           src={Heroimage}
           alt="Background"
-          className="object-fill w-full h-full"
+          className="object-cover w-full h-full"
         />
       </div>
 
