@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Search, Filter, ChevronDown } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Search, ChevronDown } from "lucide-react";
 import banner from "../assets/images/banner-products.png";
 import saislogo from "../assets/images/brands/LogoAS.png";
 import sidihrazamlogo from "../assets/images/brands/sidihrazam-logo.png";
@@ -8,7 +8,6 @@ import product1 from "../assets/images/poducts/sais-bottle-05.png";
 import product2 from "../assets/images/poducts/product-2.png";
 import product3 from "../assets/images/poducts/product-3.png";
 import product4 from "../assets/images/poducts/product-4.png";
-
 import { motion } from "framer-motion";
 
 // Define TypeScript interfaces
@@ -35,6 +34,7 @@ interface Format {
   name: string;
 }
 
+// Animation variants
 const container = {
   hidden: { opacity: 0 },
   show: {
@@ -58,14 +58,14 @@ const products: Product[] = [
     description: "PACK 12 / 33CL",
     brand: "Ain Saiss",
     price: 15.99,
-    format: "Grand format",
+    format: "Petit format",
     featured: true,
     new: false,
     image: product1,
   },
   {
     id: 2,
-    name: "AÏN SAÏSS BULLES PREMIUM 0,75L ",
+    name: "AÏN SAÏSS BULLES PREMIUM 0,75L",
     description: "PACK 12 / 0.75L",
     brand: "Ain Saiss",
     price: 18.99,
@@ -87,11 +87,11 @@ const products: Product[] = [
   },
   {
     id: 4,
-    name: "AÏN SAÏSS BULLES 1L ",
+    name: "AÏN SAÏSS BULLES 1L",
     description: "PACK 6 / 1L",
     brand: "Sidi Hrazam",
     price: 21.99,
-    format: "Petit format",
+    format: "Moyen format",
     featured: false,
     new: true,
     image: product4,
@@ -99,7 +99,7 @@ const products: Product[] = [
   {
     id: 5,
     name: "Fontaine d'eau",
-    description: "Fontaine d'eau pour bureau ou maison",
+    description: "PACK 12 / 33CL",
     brand: "Ain Saiss",
     price: 199.99,
     format: "Fontaines",
@@ -110,7 +110,7 @@ const products: Product[] = [
   {
     id: 6,
     name: "Pack eau minérale",
-    description: "Pack de 12 bouteilles d'eau minérale",
+    description: "PACK 12 / 33CL",
     brand: "Ghayt",
     price: 45.99,
     format: "Grand format",
@@ -155,44 +155,65 @@ const formats: Format[] = [
   },
   {
     id: "fontaines",
-    name: "Fontaines / Bidons ( 5L et 6L)",
+    name: "Fontaines / Bidons (5L et 6L)",
   },
 ];
+
+// Brand to filter mapping
+const brandMap: Record<string, string> = {
+  "ain-saiss": "Ain Saiss",
+  ghayt: "Ghayt",
+  "sidi-hrazam": "Sidi Hrazam",
+};
+
+// Format to filter mapping
+const formatMap: Record<string, string> = {
+  petit: "Petit format",
+  moyen: "Moyen format",
+  grand: "Grand format",
+  fontaines: "Fontaines",
+};
 
 // Product Card Component
 interface ProductCardProps {
   product: Product;
+  onAddToCart: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  // Mock function for adding to cart
-
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   return (
     <motion.div
-      key={product.id}
-      className="bg-white rounded-lg p-4 flex flex-col items-center  h-full"
+      className="p-4 flex flex-col items-center h-full  rounded-3xl  hover:shadow-md transition-shadow duration-300"
       variants={item}
     >
       <div className="relative w-full flex justify-center">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
-          className=" h-auto max-h-[380px] object-cover object-center rounded-md"
+          className="h-auto max-h-[380px] object-cover object-center rounded-2xl"
         />
+        {/* {product.new && (
+          <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+            Nouveau
+          </div>
+        )} */}
       </div>
-      <div className="flex-1 text-center font-sans mt-10">
+      <div className="flex-1 text-center font-sans mt-10 w-full">
         <h3 className="text-blue-700 font-semibold text-base uppercase">
           {product.name}
         </h3>
-        <p className="text-gray-500 text-xs mt-1">{product.name}</p>
+        <p className="text-gray-500 text-xs mt-1">{product.description}</p>
       </div>
 
       {/* Price & Add Button */}
-      <div className="w-full mt-auto text-center">
+      <div className="w-full mt-auto text-center pt-4">
         <p className="text-gray-900 font-medium mb-4 text-lg">
           {product.price.toFixed(2)} <span className="text-xs">DH</span>
         </p>
-        <button className="w-2/5 bg-blue-500 text-white hover:bg-primary/75 text-base py-2 px-0 rounded-full">
+        <button
+          className="w-2/5 bg-blue-500 text-white hover:bg-blue-600 text-base py-2 px-0 rounded-full transition-colors duration-300"
+          onClick={() => onAddToCart(product)}
+        >
           Ajouter
         </button>
       </div>
@@ -207,50 +228,62 @@ const ProductsPage: React.FC = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] =
     useState<boolean>(false);
+  const [mobileFilterType, setMobileFilterType] = useState<
+    "brands" | "formats" | null
+  >(null);
 
-  // Filter and sort products
-  useEffect(() => {
+  // Function to add to cart
+  const addToCart = (product: Product) => {
+    console.log("Added to cart:", product);
+    // Here you would normally dispatch an action to your cart state manager
+    alert(`${product.name} ajouté au panier`);
+  };
+
+  // Memoize the filter function to avoid unnecessary recalculations
+  const filterProducts = useCallback(() => {
+    console.log("Filtering products with:", {
+      selectedBrands,
+      selectedFormats,
+      searchQuery,
+    });
+
     let filtered = [...products];
 
     // Filter by brand if any selected
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((product) =>
-        selectedBrands.some((brand) => {
-          if (brand === "ain-saiss") return product.brand === "Ain Saiss";
-          if (brand === "ghayt") return product.brand === "Ghayt";
-          if (brand === "sidi-hrazam") return product.brand === "Sidi Hrazam";
-          return false;
-        })
+        selectedBrands.some((brandId) => brandMap[brandId] === product.brand)
       );
     }
 
     // Filter by format if any selected
     if (selectedFormats.length > 0) {
       filtered = filtered.filter((product) =>
-        selectedFormats.some((format) => {
-          if (format === "petit") return product.format === "Petit format";
-          if (format === "moyen") return product.format === "Moyen format";
-          if (format === "grand") return product.format === "Grand format";
-          if (format === "fontaines") return product.format === "Fontaines";
-          return false;
-        })
+        selectedFormats.some(
+          (formatId) => formatMap[formatId] === product.format
+        )
       );
     }
 
     // Filter by search query
-    if (searchQuery) {
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (product) =>
-          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.description
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          product.brand.toLowerCase().includes(searchQuery.toLowerCase())
+          product.name.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.brand.toLowerCase().includes(query)
       );
     }
 
-    setFilteredProducts(filtered);
+    console.log("Filtered products count:", filtered.length);
+    return filtered;
   }, [selectedBrands, selectedFormats, searchQuery]);
+
+  // Update filtered products when filters change
+  useEffect(() => {
+    setFilteredProducts(filterProducts());
+  }, [filterProducts]);
 
   // Toggle brand selection
   const toggleBrand = (brandId: string): void => {
@@ -270,8 +303,16 @@ const ProductsPage: React.FC = () => {
     );
   };
 
+  // Reset filters
+  const resetFilters = () => {
+    setSelectedBrands([]);
+    setSelectedFormats([]);
+    setSearchQuery("");
+    setMobileFilterType(null);
+  };
+
   return (
-    <div>
+    <div className="min-h-screen ">
       {/* Hero Section */}
       <div className="relative bg-blue-50 py-12 h-[40vh] overflow-hidden rounded-3xl">
         <div className="absolute inset-0 z-0">
@@ -281,8 +322,8 @@ const ProductsPage: React.FC = () => {
             className="object-cover h-full w-full"
           />
         </div>
-        <div className="container mt-10  md:mt-14 mx-auto px-4 relative z-10">
-          <h1 className="text-2xl lg:text-7xl text-[#0F67B1] font-normal  text-center mb-8">
+        <div className="container mt-10 md:mt-14 mx-auto px-4 relative z-10">
+          <h1 className="text-2xl lg:text-7xl text-[#0F67B1] font-normal text-center mb-8">
             Tous les produits
           </h1>
           <div className="max-w-2xl mx-auto md:mt-16">
@@ -290,45 +331,65 @@ const ProductsPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Rechercher un produit..."
-                className="w-full py-3 bg-white text-[#11459D] px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full py-3 bg-white text-[#11459D] px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F67B1] focus:border-transparent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <Search className="absolute  right-3 top-3 text-[#11459D]" />
+              <Search className="absolute right-3 top-3 text-[#11459D]" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto px-4 py-8">
-        {/* Mobile Filters Toggle */}
-        <div className="md:hidden mb-4 flex justify-between items-center">
+      <div className=" mx-auto px-4 py-8">
+        {/* Mobile Filters */}
+        <div className="md:hidden mb-6 flex justify-center space-x-4">
           <button
-            onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-            className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm"
+            onClick={() => {
+              setMobileFilterType(
+                mobileFilterType === "brands" ? null : "brands"
+              );
+              setIsMobileFiltersOpen(mobileFilterType !== "brands");
+            }}
+            className="flex items-center justify-center bg-white px-6 py-3 rounded-full shadow-sm text-[#0F67B1] border border-[#0F67B1]"
           >
-            <Filter className="h-4 w-4" />
-            <span>Filtres</span>
+            <span>Marques</span>
             <ChevronDown
-              className={`h-4 w-4 transition-transform ${
-                isMobileFiltersOpen ? "rotate-180" : ""
+              className={`h-4 w-4 ml-2 transition-transform ${
+                mobileFilterType === "brands" ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          <button
+            onClick={() => {
+              setMobileFilterType(
+                mobileFilterType === "formats" ? null : "formats"
+              );
+              setIsMobileFiltersOpen(mobileFilterType !== "formats");
+            }}
+            className="flex items-center justify-center bg-white px-6 py-3 rounded-full shadow-sm text-[#0F67B1] border border-[#0F67B1]"
+          >
+            <span>Format</span>
+            <ChevronDown
+              className={`h-4 w-4 ml-2 transition-transform ${
+                mobileFilterType === "formats" ? "rotate-180" : ""
               }`}
             />
           </button>
         </div>
 
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div
-            className={`w-full md:w-72  shrink-0 ${
-              isMobileFiltersOpen ? "block" : "hidden"
-            } md:block`}
-          >
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          {/* Filters Sidebar - Desktop */}
+          <div className="hidden md:block w-80 shrink-0">
+            <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+              {/* Brands Filter */}
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-medium text-primary text-lg">Marques</h3>
+                  <h3 className="font-medium text-[#0F67B1] text-lg">
+                    Marques
+                  </h3>
                   <svg
                     className="w-5 h-5 text-gray-500"
                     fill="none"
@@ -348,21 +409,21 @@ const ProductsPage: React.FC = () => {
                     <div key={brand.id} className="flex items-center py-1">
                       <input
                         type="checkbox"
-                        id={`brand-${brand.id}`}
+                        id={`desktop-brand-${brand.id}`}
                         checked={selectedBrands.includes(brand.id)}
                         onChange={() => toggleBrand(brand.id)}
-                        className="h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
+                        className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
                       />
                       <label
-                        htmlFor={`brand-${brand.id}`}
-                        className="ml- flex items-center"
+                        htmlFor={`desktop-brand-${brand.id}`}
+                        className="flex items-center"
                       >
                         <img
                           src={brand.logo || "/placeholder.svg"}
                           alt={brand.name}
                           width={90}
                           height={45}
-                          className="ml-20"
+                          className="ml-10"
                         />
                       </label>
                     </div>
@@ -370,9 +431,10 @@ const ProductsPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* Formats Filter */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-medium text-primary text-lg">Format</h3>
+                  <h3 className="font-medium text-[#0F67B1] text-lg">Format</h3>
                   <svg
                     className="w-5 h-5 text-gray-500"
                     fill="none"
@@ -392,14 +454,14 @@ const ProductsPage: React.FC = () => {
                     <div key={format.id} className="flex items-center py-1">
                       <input
                         type="checkbox"
-                        id={`format-${format.id}`}
+                        id={`desktop-format-${format.id}`}
                         checked={selectedFormats.includes(format.id)}
                         onChange={() => toggleFormat(format.id)}
-                        className="h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
+                        className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
                       />
                       <label
-                        htmlFor={`format-${format.id}`}
-                        className="ml-14 text-base text-gray-700"
+                        htmlFor={`desktop-format-${format.id}`}
+                        className="ml-3 text-base text-gray-700"
                       >
                         {format.name}
                       </label>
@@ -408,16 +470,11 @@ const ProductsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Reset Filters Button (Mobile) */}
-              <div className="md:hidden mt-8">
+              {/* Reset Filters Button (Desktop) */}
+              <div className="mt-8">
                 <button
-                  onClick={() => {
-                    setSelectedBrands([]);
-                    setSelectedFormats([]);
-                    setSearchQuery("");
-                    setIsMobileFiltersOpen(false);
-                  }}
-                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-md transition-colors duration-200 font-medium"
+                  onClick={resetFilters}
+                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-full transition-colors duration-200 font-medium"
                 >
                   Réinitialiser les filtres
                 </button>
@@ -425,15 +482,104 @@ const ProductsPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Mobile Filters Dropdown */}
+          {isMobileFiltersOpen && (
+            <div className="md:hidden w-full  p-6 mb-6">
+              {mobileFilterType === "brands" && (
+                <div>
+                  <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
+                    Marques
+                  </h3>
+                  <div className="space-y-5">
+                    {brands.map((brand) => (
+                      <div key={brand.id} className="flex items-center py-1">
+                        <input
+                          type="checkbox"
+                          id={`mobile-brand-${brand.id}`}
+                          checked={selectedBrands.includes(brand.id)}
+                          onChange={() => toggleBrand(brand.id)}
+                          className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor={`mobile-brand-${brand.id}`}
+                          className="flex items-center"
+                        >
+                          <img
+                            src={brand.logo || "/placeholder.svg"}
+                            alt={brand.name}
+                            width={90}
+                            height={45}
+                            className="ml-8"
+                          />
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {mobileFilterType === "formats" && (
+                <div>
+                  <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
+                    Format
+                  </h3>
+                  <div className="space-y-5">
+                    {formats.map((format) => (
+                      <div key={format.id} className="flex items-center py-1">
+                        <input
+                          type="checkbox"
+                          id={`mobile-format-${format.id}`}
+                          checked={selectedFormats.includes(format.id)}
+                          onChange={() => toggleFormat(format.id)}
+                          className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
+                        />
+                        <label
+                          htmlFor={`mobile-format-${format.id}`}
+                          className="ml-3 text-base text-gray-700"
+                        >
+                          {format.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Reset Filters Button (Mobile) */}
+              <div className="mt-6">
+                <button
+                  onClick={() => {
+                    resetFilters();
+                    setIsMobileFiltersOpen(false);
+                  }}
+                  className="w-full bg-[#0F67B1] text-white py-3 px-4 rounded-full transition-colors duration-200 font-medium"
+                >
+                  Appliquer les filtres
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Products Grid */}
           <div className="flex-1">
-            {/* Results Count and Sort (Desktop) */}
-            <div className="hidden md:flex justify-between items-center mb-6">
+            {/* Results Count */}
+            <div className="flex justify-between items-center mb-6">
               <p className="text-gray-600">
                 {filteredProducts.length} produit
                 {filteredProducts.length !== 1 ? "s" : ""} trouvé
                 {filteredProducts.length !== 1 ? "s" : ""}
               </p>
+
+              {(selectedBrands.length > 0 ||
+                selectedFormats.length > 0 ||
+                searchQuery.trim()) && (
+                <button
+                  onClick={resetFilters}
+                  className="text-[#0F67B1] hover:text-blue-700 text-sm font-medium flex items-center"
+                >
+                  Réinitialiser les filtres
+                </button>
+              )}
             </div>
 
             <motion.div
@@ -442,9 +588,16 @@ const ProductsPage: React.FC = () => {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
+              key={`products-${selectedBrands.join("-")}-${selectedFormats.join(
+                "-"
+              )}-${searchQuery}`}
             >
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAddToCart={addToCart}
+                />
               ))}
             </motion.div>
 
@@ -454,12 +607,8 @@ const ProductsPage: React.FC = () => {
                   Aucun produit ne correspond à votre recherche.
                 </p>
                 <button
-                  onClick={() => {
-                    setSelectedBrands([]);
-                    setSelectedFormats([]);
-                    setSearchQuery("");
-                  }}
-                  className="bg-primary hover:bg-blue-600 text-white py-2 px-6 rounded-md transition-colors duration-200"
+                  onClick={resetFilters}
+                  className="bg-[#0F67B1] hover:bg-blue-600 text-white py-2 px-6 rounded-full transition-colors duration-200"
                 >
                   Réinitialiser les filtres
                 </button>

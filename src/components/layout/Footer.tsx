@@ -9,7 +9,7 @@ import localisation from "../../assets/icons/localisation.svg";
 
 const Footer = () => {
   return (
-    <footer className="mt-10 mb-16 ">
+    <footer className="mt-10 mb-16 bg-white">
       {/* Main Footer */}
       <div className=" mx-auto py-14 rounded-3xl shadow-xl ">
         {/* Services */}
