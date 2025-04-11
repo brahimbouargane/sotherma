@@ -3,8 +3,45 @@ import HeroBanner from "../components/home/HeroBanner";
 import CategorySection from "../components/home/CategorySection";
 import FeaturedProducts from "../components/home/FeaturedProducts";
 import BrandShowcase from "../components/home/BrandShowcase";
-import BlogPreview from "../components/home/BlogPreview";
+import BlogPreview, { BlogPost } from "../components/home/BlogPreview";
 import DeliveryInfo from "../components/home/DeliveryInfo";
+
+import blog1 from "../assets/images/blog/blog-1.png";
+import blog2 from "../assets/images/blog/blog-2.png";
+import blog3 from "../assets/images/blog/blog-3.png";
+
+const blogPosts: BlogPost[] = [
+  {
+    id: "post-1",
+    title: "Blog title heading will go here neatly spanning over two lines",
+    excerpt:
+      "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
+    image: blog1,
+    category: "Lifestyle",
+    date: "5 mai 2023",
+    link: "/blog/post-1",
+  },
+  {
+    id: "post-2",
+    title: "Blog title heading will go here neatly spanning over two lines",
+    excerpt:
+      "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
+    image: blog2,
+    category: "Santé",
+    date: "3 mai 2023",
+    link: "/blog/post-2",
+  },
+  {
+    id: "post-3",
+    title: "Blog title heading will go here neatly spanning over two lines",
+    excerpt:
+      "Suspendisse vitae enim in eros tristique ultricies eu placerat velit. Suspendisse vulputate id eros vitae.",
+    image: blog3,
+    category: "Sports",
+    date: "1 mai 2023",
+    link: "/blog/post-3",
+  },
+];
 
 const HomePage = () => {
   return (
@@ -30,7 +67,7 @@ const HomePage = () => {
       <CategorySection />
       <FeaturedProducts />
       <BrandShowcase />
-      <BlogPreview />
+      <BlogPreview blogPosts={blogPosts} />
       <DeliveryInfo />
     </div>
   );

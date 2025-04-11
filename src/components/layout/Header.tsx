@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <header className=" ">
-      <div className="mx-auto  py-3">
+      <div className="mx-auto  py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
@@ -17,7 +17,7 @@ const Header = () => {
           </Link>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8 ml-28 ">
             <Link
               to="/produits"
               className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
@@ -41,7 +41,7 @@ const Header = () => {
           {/* User Actions */}
           <div className="flex items-center space-x-4">
             {/* Cart Icon */}
-            <Link to="/cart" className="relative p-2">
+            <div className="relative p-2 cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6 text-[#37AFE1] hover:text-blue-800 transition-colors"
@@ -61,15 +61,22 @@ const Header = () => {
                   {cartItemsCount}
                 </span>
               )}
-            </Link>
+            </div>
 
             {/* Login / Sign Up */}
-            <div className="hidden md:block">
+            <div className="hidden md:flex items-center space-x-3">
               <Link
                 to="/login"
                 className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
               >
-                Log in / Sign up
+                Log in
+              </Link>
+              <span className="text-[#37AFE1]">/</span>
+              <Link
+                to="/signup"
+                className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
+              >
+                Sign up
               </Link>
             </div>
 
@@ -81,7 +88,7 @@ const Header = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-700"
+                className="h-6 w-6 text-[#37AFE1]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -103,33 +110,39 @@ const Header = () => {
             <div className="flex flex-col space-y-4">
               <Link
                 to="/products"
-                className="text-gray-700 hover:text-primary transition-colors"
+                className="text-[#37AFE1] hover:text-primary transition-colors"
               >
                 Nos Produits
               </Link>
               <Link
                 to="/products/category/large-bottles"
-                className="text-gray-700 hover:text-primary transition-colors"
+                className="text-[#37AFE1] hover:text-primary transition-colors"
               >
                 Catégories
               </Link>
               <Link
                 to="/blog"
-                className="text-gray-700 hover:text-primary transition-colors"
+                className="text-[#37AFE1] hover:text-primary transition-colors"
               >
                 Nos Actualités
               </Link>
               <Link
                 to="/about"
-                className="text-gray-700 hover:text-primary transition-colors"
+                className="text-[#37AFE1] hover:text-primary transition-colors"
               >
                 À propos
               </Link>
               <Link
                 to="/login"
-                className="text-primary hover:text-primary-dark transition-colors"
+                className="text-[#37AFE1] hover:text-[#37AFE1]-dark transition-colors"
               >
-                Log in / Sign up
+                Log in
+              </Link>
+              <Link
+                to="/signup"
+                className="text-[#37AFE1] hover:text-[#37AFE1]-dark transition-colors"
+              >
+                Sign up
               </Link>
             </div>
           </nav>
