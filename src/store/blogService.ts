@@ -4,6 +4,7 @@ export interface BlogPostOne {
   id: number;
   postId: string; // This can be used for routing
   title: string;
+  tags?: string[];
   slug: string;
   category: string;
   publishDate: string;
@@ -12,13 +13,14 @@ export interface BlogPostOne {
     title: string;
     content: string;
   };
-  sections: Array<{
+  sections?: Array<{
+    type?: string;
     title?: string;
-    content: string;
+    paragraphs?: string[];
     image?: string;
     caption?: string;
   }>;
-  conclusion: {
+  conclusion?: {
     title: string;
     content: string;
   };
@@ -26,6 +28,10 @@ export interface BlogPostOne {
     name: string;
     image: string;
     bio: string;
+  };
+  socialSharing: {
+    text: string;
+    platforms: string[];
   };
   relatedPosts: Array<{
     id: number;
@@ -42,6 +48,7 @@ const blogPosts: BlogPostOne[] = [
     postId: "le-titre-de-larticle",
     title: "Le titre de l'article",
     slug: "le-titre-de-larticle",
+    tags: ["Health", "Water", "Nutrition", "Wellness"],
     category: "category",
     publishDate: "12 Avril 2025",
     mainImage:
@@ -53,27 +60,33 @@ const blogPosts: BlogPostOne[] = [
     },
     sections: [
       {
-        title: "",
-        content:
-          "Boire une quantité suffisante d'eau chaque jour peut aider à prévenir les maux de tête, améliorer la concentration et l'humeur, et favoriser un sommeil réparateur. Quand nous ne buvons pas assez d'eau, nous risquons de souffrir de déshydratation, ce qui peut entraîner des symptômes comme la fatigue, des étourdissements et des crampes musculaires.",
+        type: "introduction",
+        title: "Introduction",
+        paragraphs: [
+          "In posuper vel, scelerisque leo et, dolor amet, nec lorem scelerisque viverra adipiscing hendrerit. Neque nisi velit morbi mattis cras volutpat urna nulla arcu nec, nibh massa urna velit, vitae sed, urna luctus. Et magna sapien vestibuli.",
+          "Eget quam ipsum, ele eleifend blandit in, integer quam in dignit mus at dui eget amet, velit mauris. Vitae vestibulum dui morbi erat. Sit amet duis tellus blandit. In iaculis vestibulum atre porttitor mauris. Vivamus nec pretium hendrerit, enim et venenatis libero erat in commodo sit eur.",
+        ],
         image:
           "https://images.unsplash.com/photo-1594745672419-1caafdc11087?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         caption: "En image, un verre d'eau.",
       },
       {
-        title: "Boire assez est bonne chose pour votre santé.",
-        content:
-          "Aliquam vestibulum, nulla odio nisl vitae, id dignissim lorem odiam. Ornare an a euismod dignissim lorem. Aliquam vestibulum, nulla odio nisl vitae, id dignissim lorem odiam. Ornare an a euismod dignissim lorem. Nam et lobortis tellus. Etiam ac enim cursus, scelerisque ex ut, lobortis tortor. Aenean et magna sit amet urna vestibulum tristique. Maecenas vitae dignissim risus, ac porttitor diam. Morbi viverra orci at malesuada ultricies. Donec porttitor ipsum non tortor consequat convallis.",
+        type: "content",
+        paragraphs: [
+          "Dolor aritus am tortor urna sed duis mollis. Aliquam vestibulum, nulla esto commodo metus, tellus est quam nisl, posuere. Nune lorem ultrices sit scelerisque bibendum diam. Tempor feugiat adipiscing in vitae malesuada fringilla.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et malesuada libero, id pharetra nibh. Phasellus ultrices bibendum quam, non interdum leo lobortis vel. Suspendisse nec lacus volutpat felis, volutpat venenatis posuere scelerisque convallis integer. Aenean ullamcorper nisi at lacus consectetur lobortis. Integer lacinia metus in arcu porta, a consectetur lorem nisi eleifend. Nulla lacus velit massa, pharetra justo.",
+          "Vivam sit mentia nulls quam nulla. Gravida id posuida ex carin donario ut fasis consequatque sit quam aipid condimentum magna. Sapien, ultrices incentos quis accidentali, in varius hac. Donec consectetur sed a ut nulla.",
+          "Vivamus nulla dolor lacus, non volutpat cursus vel massa, volutpat facilisi. Auet nec volutpat cursus massa laoret consequat, sapien id sollicitudin turpis. Duis sed sapien quis magna tincidunt condimentum in libero sagittis. Curabitur rhoncus eget urna ac pulvinar. Vivamus leo velit massa posuere pede.",
+        ],
       },
       {
-        title: "",
-        content:
-          "Il existe différentes sources d'eau potable, comme l'eau du robinet, l'eau en bouteille et l'eau filtrée. Chacune a ses avantages et ses inconvénients. L'eau du robinet est généralement sûre à boire dans de nombreux pays et est plus économique et écologique que l'eau en bouteille. L'eau en bouteille peut être plus pratique lorsque vous êtes en déplacement, mais elle génère des déchets plastiques qui nuisent à l'environnement. L'eau filtrée peut offrir un compromis entre les deux, en réduisant les contaminants potentiels de l'eau du robinet tout en limitant les déchets plastiques produits.",
-      },
-      {
-        title: "",
-        content:
-          "Pour rester bien hydraté tout au long de la journée, essayez de garder une bouteille d'eau réutilisable à portée de main. Buvez avant, pendant et après l'exercice physique. Mangez des aliments riches en eau, comme les concombres, les pastèques et les oranges. Créez des rappels pour boire régulièrement, surtout si vous avez tendance à oublier. Et n'attendez pas d'avoir soif pour boire, car la soif est déjà un signe de déshydratation.",
+        type: "conclusion",
+        title: "Conclusion",
+        paragraphs: [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et malesuada libero, id pharetra nibh. Phasellus ultrices bibendum quam, non interdum leo lobortis vel. Suspendisse nec lacus volutpat felis, volutpat venenatis posuere scelerisque convallis integer.",
+          "Aenean nec felis ullamcorper feugiat quam ullamcorper. Lorem sagittis condimentum lorem in massa. In condimentum commodo amet risus ac libero iaculis. Morbi dignissim in ante sapien. Duis hendrerit nunc.",
+          "Cras nec magna massa magna velit cras magna nulla aliquet. Nam semper et urna ut enim ut aliquam consectetur sed libero. Lorem ipsum et massas sapien et viverre. Molesstias massa mauris aliquet massa scelerisque ane. Amet condimentum posuere proin porta non curabitur cum aliq.",
+        ],
       },
     ],
     conclusion: {
@@ -85,6 +98,10 @@ const blogPosts: BlogPostOne[] = [
       name: "Mona Elsa",
       image: "https://randomuser.me/api/portraits/women/12.jpg",
       bio: "Nutritionniste spécialisée dans l'hydratation et la santé globale. Consultante pour plusieurs marques d'eau et de boissons fonctionnelles.",
+    },
+    socialSharing: {
+      text: "Share this post",
+      platforms: ["Facebook", "Twitter", "Pinterest", "Email"],
     },
     relatedPosts: [
       {
@@ -114,6 +131,7 @@ const blogPosts: BlogPostOne[] = [
     slug: "bienfaits-eaux-minerales",
     category: "Santé",
     publishDate: "5 Avril 2025",
+    tags: ["Health", "Water", "Nutrition", "Wellness"],
     mainImage:
       "https://images.unsplash.com/photo-1564419320461-6870880221ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     introduction: {
@@ -121,30 +139,51 @@ const blogPosts: BlogPostOne[] = [
       content:
         "L'eau minérale naturelle provient de sources souterraines protégées de toute pollution. Elle est caractérisée par sa pureté et sa composition en minéraux et oligo-éléments qui lui confèrent des propriétés bénéfiques pour la santé. Contrairement à l'eau du robinet, l'eau minérale n'est pas traitée chimiquement et conserve ainsi ses qualités originelles.",
     },
+
     sections: [
       {
-        title: "Les différents types d'eaux minérales",
-        content:
-          "Il existe plusieurs catégories d'eaux minérales, chacune ayant ses caractéristiques propres. Les eaux faiblement minéralisées, comme l'eau de source, conviennent à la consommation quotidienne et à la préparation des biberons. Les eaux moyennement minéralisées apportent un complément intéressant en calcium et en magnésium. Les eaux fortement minéralisées, quant à elles, sont recommandées pour des cures spécifiques et ne doivent pas être consommées en permanence.",
+        type: "introduction",
+        title: "Introduction",
+        paragraphs: [
+          "In posuper vel, scelerisque leo et, dolor amet, nec lorem scelerisque viverra adipiscing hendrerit. Neque nisi velit morbi mattis cras volutpat urna nulla arcu nec, nibh massa urna velit, vitae sed, urna luctus. Et magna sapien vestibuli.",
+          "Eget quam ipsum, ele eleifend blandit in, integer quam in dignit mus at dui eget amet, velit mauris. Vitae vestibulum dui morbi erat. Sit amet duis tellus blandit. In iaculis vestibulum atre porttitor mauris. Vivamus nec pretium hendrerit, enim et venenatis libero erat in commodo sit eur.",
+        ],
         image:
-          "https://images.unsplash.com/photo-1610013762141-0fc363086e35?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        caption: "Différentes bouteilles d'eau minérale.",
+          "https://images.unsplash.com/photo-1594745672419-1caafdc11087?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        caption: "En image, un verre d'eau.",
       },
       {
-        title: "Les minéraux essentiels et leurs bienfaits",
-        content:
-          "Les eaux minérales sont riches en éléments bénéfiques pour notre organisme. Le calcium, présent dans certaines eaux, contribue à la solidité des os et au bon fonctionnement musculaire. Le magnésium aide à lutter contre la fatigue et le stress. Le potassium participe à l'équilibre hydrique et au bon fonctionnement du système nerveux. Le bicarbonate facilite la digestion et neutralise l'acidité gastrique.",
+        type: "content",
+        paragraphs: [
+          "Dolor aritus am tortor urna sed duis mollis. Aliquam vestibulum, nulla esto commodo metus, tellus est quam nisl, posuere. Nune lorem ultrices sit scelerisque bibendum diam. Tempor feugiat adipiscing in vitae malesuada fringilla.",
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et malesuada libero, id pharetra nibh. Phasellus ultrices bibendum quam, non interdum leo lobortis vel. Suspendisse nec lacus volutpat felis, volutpat venenatis posuere scelerisque convallis integer. Aenean ullamcorper nisi at lacus consectetur lobortis. Integer lacinia metus in arcu porta, a consectetur lorem nisi eleifend. Nulla lacus velit massa, pharetra justo.",
+          "Vivam sit mentia nulls quam nulla. Gravida id posuida ex carin donario ut fasis consequatque sit quam aipid condimentum magna. Sapien, ultrices incentos quis accidentali, in varius hac. Donec consectetur sed a ut nulla.",
+          "Vivamus nulla dolor lacus, non volutpat cursus vel massa, volutpat facilisi. Auet nec volutpat cursus massa laoret consequat, sapien id sollicitudin turpis. Duis sed sapien quis magna tincidunt condimentum in libero sagittis. Curabitur rhoncus eget urna ac pulvinar. Vivamus leo velit massa posuere pede.",
+        ],
+      },
+      {
+        type: "conclusion",
+        title: "Conclusion",
+        paragraphs: [
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et malesuada libero, id pharetra nibh. Phasellus ultrices bibendum quam, non interdum leo lobortis vel. Suspendisse nec lacus volutpat felis, volutpat venenatis posuere scelerisque convallis integer.",
+          "Aenean nec felis ullamcorper feugiat quam ullamcorper. Lorem sagittis condimentum lorem in massa. In condimentum commodo amet risus ac libero iaculis. Morbi dignissim in ante sapien. Duis hendrerit nunc.",
+          "Cras nec magna massa magna velit cras magna nulla aliquet. Nam semper et urna ut enim ut aliquam consectetur sed libero. Lorem ipsum et massas sapien et viverre. Molesstias massa mauris aliquet massa scelerisque ane. Amet condimentum posuere proin porta non curabitur cum aliq.",
+        ],
       },
     ],
-    conclusion: {
-      title: "Conclusion",
-      content:
-        "Choisir une eau minérale adaptée à ses besoins est une démarche qui peut contribuer à une meilleure santé au quotidien. Néanmoins, il est important de varier les sources d'eau minérale pour bénéficier d'apports équilibrés en minéraux et de consulter un professionnel de santé pour toute cure spécifique.",
-    },
+    // conclusion: {
+    //   title: "Conclusion",
+    //   content:
+    //     "Choisir une eau minérale adaptée à ses besoins est une démarche qui peut contribuer à une meilleure santé au quotidien. Néanmoins, il est important de varier les sources d'eau minérale pour bénéficier d'apports équilibrés en minéraux et de consulter un professionnel de santé pour toute cure spécifique.",
+    // },
     author: {
       name: "Dr. Pierre Fontaine",
       image: "https://randomuser.me/api/portraits/men/42.jpg",
       bio: "Médecin nutritionniste spécialisé dans l'hydratation et l'équilibre minéral. Auteur de plusieurs ouvrages sur les bienfaits de l'eau.",
+    },
+    socialSharing: {
+      text: "Share this post",
+      platforms: ["Facebook", "Twitter", "Pinterest", "Email"],
     },
     relatedPosts: [
       {

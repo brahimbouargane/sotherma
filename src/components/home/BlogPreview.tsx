@@ -209,7 +209,7 @@ const BlogPreview = ({
       <div className="mx-auto">
         {showTitle && (
           <motion.h2
-            className="text-2xl md:text-5xl font-normal text-blue-700 text-center mb-2"
+            className="text-2xl md:text-7xl font-normal text-[#0F67B1] text-center mb-2"
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -220,7 +220,7 @@ const BlogPreview = ({
 
         {showSubtitle && (
           <motion.p
-            className="text-gray-500 text-center mb-12"
+            className="text-gray-500 text-center mb-10 mt-8 text-lg"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -231,7 +231,7 @@ const BlogPreview = ({
         )}
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 px-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 md:px-12"
           variants={container}
           initial="hidden"
           whileInView="show"
