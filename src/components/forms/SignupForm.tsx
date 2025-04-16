@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Heroimage from "../../assets/images/mask-hero-seaction.png";
+import HeroimageMobile from "../../assets/images/hero-original-image.png"; // Import mobile image
 import { Helmet } from "react-helmet-async";
 
 interface SignupFormProps {
@@ -26,6 +27,23 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
   });
 
   const [errors, setErrors] = useState<Partial<SignupData>>({});
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Check if device is mobile based on screen width
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768); // Consider < 768px as mobile
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkIfMobile);
+
+    // Clean up event listener
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -99,7 +117,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
 
   return (
     <div
-      className={`relative h-[90vh]  py-8 md:py-16 overflow-hidden ${className}`}
+      className={`relative min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
     >
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>
@@ -108,33 +126,36 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
           content="Eau minérale naturelle pour une meilleure récupération pendant et après l'effort."
         />
       </Helmet>
-      {/* Background Image */}
-      <div className="absolute h-full w-full top-0 left-0 z-0">
+      {/* Background Image - Conditional rendering based on screen size */}
+      <div className="absolute h-full md:h-[90vh] w-full top-0 left-0 z-0 ">
         <img
-          src={Heroimage}
+          src={isMobile ? HeroimageMobile : Heroimage}
           alt="Mountain landscape"
-          className="w-full h-full object-fill"
+          className="w-full h-full object-cover object-center rounded-3xl"
         />
       </div>
 
       {/* Form Container */}
       <motion.div
-        className="bg-white z-10 relative max-w-xl mx-auto  rounded-3xl shadow-lg p-8 md:p-10 mt-4"
+        className="bg-white z-10 relative w-[95%] max-w-xl mx-auto rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 md:mt-4 mt-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-3xl text-blue-700 text-center font-normal mb-2">
+        <h2 className="text-2xl md:text-5xl text-blue-700 text-center font-normal mb-1 sm:mb-2">
           Inscription
         </h2>
-        <p className="text-gray-600 text-center mb-6">
+        <p className="text-sm md:text-lg text-gray-600 text-center mb-4 sm:mb-6">
           Créez votre compte en quelques clics !
         </p>
 
-        <form className="px-2 pt-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <form className="px-1 sm:px-2 pt-2 sm:pt-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-3 sm:mb-4">
             <div className="flex-1">
-              <label htmlFor="nom" className="block text-gray-700 mb-1">
+              <label
+                htmlFor="nom"
+                className="block text-gray-700 text-sm sm:text-base mb-1"
+              >
                 Nom*
               </label>
               <input
@@ -143,17 +164,20 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
                 name="nom"
                 value={formData.nom}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border ${
+                className={`w-full px-3 sm:px-4 py-2 border ${
                   errors.nom ? "border-red-500" : "border-gray-300"
                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
               {errors.nom && (
-                <p className="text-red-500 text-sm">{errors.nom}</p>
+                <p className="text-red-500 text-xs sm:text-sm">{errors.nom}</p>
               )}
             </div>
 
             <div className="flex-1">
-              <label htmlFor="prenom" className="block text-gray-700 mb-1">
+              <label
+                htmlFor="prenom"
+                className="block text-gray-700 text-sm sm:text-base mb-1"
+              >
                 Prénom
               </label>
               <input
@@ -162,18 +186,23 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
                 name="prenom"
                 value={formData.prenom}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border ${
+                className={`w-full px-3 sm:px-4 py-2 border ${
                   errors.prenom ? "border-red-500" : "border-gray-300"
                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
               {errors.prenom && (
-                <p className="text-red-500 text-sm">{errors.prenom}</p>
+                <p className="text-red-500 text-xs sm:text-sm">
+                  {errors.prenom}
+                </p>
               )}
             </div>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 mb-1">
+          <div className="mb-3 sm:mb-4">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 text-sm sm:text-base mb-1"
+            >
               Email*
             </label>
             <input
@@ -182,17 +211,20 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-3 sm:px-4 py-2 border ${
                 errors.email ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
             {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
+              <p className="text-red-500 text-xs sm:text-sm">{errors.email}</p>
             )}
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-700 mb-1">
+          <div className="mb-3 sm:mb-4">
+            <label
+              htmlFor="password"
+              className="block text-gray-700 text-sm sm:text-base mb-1"
+            >
               Mot de passe*
             </label>
             <input
@@ -201,19 +233,21 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-3 sm:px-4 py-2 border ${
                 errors.password ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
             {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
+              <p className="text-red-500 text-xs sm:text-sm">
+                {errors.password}
+              </p>
             )}
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <label
               htmlFor="confirmPassword"
-              className="block text-gray-700 mb-1"
+              className="block text-gray-700 text-sm sm:text-base mb-1"
             >
               Confirmer le Mot de passe*
             </label>
@@ -223,31 +257,33 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border ${
+              className={`w-full px-3 sm:px-4 py-2 border ${
                 errors.confirmPassword ? "border-red-500" : "border-gray-300"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
             />
             {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+              <p className="text-red-500 text-xs sm:text-sm">
+                {errors.confirmPassword}
+              </p>
             )}
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <motion.button
               type="submit"
-              className="w-full bg-blue-400 hover:bg-blue-500 text-white py-3 px-8 rounded-full transition-colors duration-300"
+              className="w-full bg-blue-400 hover:bg-blue-500 text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-base transition-colors duration-300"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               Créer mon compte
             </motion.button>
 
-            <div className="text-center mt-4">
-              <p className="text-gray-600 text-sm">
+            <div className="text-center mt-3 sm:mt-4">
+              <p className="text-gray-600 text-xs sm:text-sm">
                 Vous avez déjà un compte ?{" "}
                 <a
                   onClick={handleLogin}
-                  className="text-blue-600 hover:underline cursor-pointer ml-2"
+                  className="text-blue-600 hover:underline cursor-pointer ml-1 sm:ml-2"
                 >
                   Connectez-vous
                 </a>
