@@ -110,6 +110,7 @@ function BlogPostPage() {
             Nous n'avons pas pu trouver l'article que vous recherchez.
           </p>
           <Link
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             to="/blog"
             className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition"
           >
@@ -149,11 +150,16 @@ function BlogPostPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pb-10">
           {/* Breadcrumb */}
           <div className="flex items-center py-2 md:py-4 text-sm md:text-md text-[#0F67B1] overflow-x-auto">
-            <Link to="/" className="hover:underline whitespace-nowrap">
+            <Link
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              to="/"
+              className="hover:underline whitespace-nowrap"
+            >
               Blog
             </Link>{" "}
             <ChevronRight className="h-3 w-3 md:h-4 md:w-4 mx-1 md:mx-2 flex-shrink-0" />
             <Link
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               to={`/category/${post.category.toLowerCase()}`}
               className="hover:underline font-bold whitespace-nowrap"
             >

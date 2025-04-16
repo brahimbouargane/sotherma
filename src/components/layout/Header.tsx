@@ -17,7 +17,7 @@ const Header = () => {
           </Link>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden md:flex items-center space-x-8 ml-28 ">
+          <nav className="hidden lg:flex items-center space-x-8 ml-28 ">
             <Link
               to="/produits"
               className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
@@ -106,7 +106,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4">
+          <nav className="lg:hidden mt-4 pb-4">
             <div className="flex flex-col space-y-4">
               <Link
                 to="/products"
