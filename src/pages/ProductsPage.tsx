@@ -186,17 +186,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       className="p-4 flex flex-col items-center h-full  rounded-3xl  hover:shadow-md transition-shadow duration-300"
       variants={item}
     >
-      <div className="relative w-full flex justify-center">
+      <div className="relative w-full h-48  lg:h-64 flex items-center justify-center">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
-          className="h-auto max-h-[380px] object-cover object-center rounded-2xl"
+          className="max-h-full max-w-full object-contain"
         />
-        {/* {product.new && (
-          <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-            Nouveau
-          </div>
-        )} */}
       </div>
       <div className="flex-1 text-center font-sans mt-10 w-full">
         <h3 className="text-blue-700 font-semibold text-base uppercase">
@@ -211,7 +206,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           {product.price.toFixed(2)} <span className="text-xs">DH</span>
         </p>
         <button
-          className="w-2/5 bg-blue-500 text-white hover:bg-blue-600 text-base py-2 px-0 rounded-full transition-colors duration-300"
+          className="w-full md:w-2/5 bg-blue-500 text-white hover:bg-blue-600 text-base py-2 px-0 rounded-full transition-colors duration-300"
           onClick={() => onAddToCart(product)}
         >
           Ajouter
@@ -322,8 +317,8 @@ const ProductsPage: React.FC = () => {
             className="object-cover h-full w-full"
           />
         </div>
-        <div className="container mt-10 md:mt-14 mx-auto px-4 relative z-10">
-          <h1 className="text-2xl lg:text-7xl text-[#0F67B1] font-normal text-center mb-8">
+        <div className=" mt-10 md:mt-14 mx-auto px-4 relative z-10">
+          <h1 className="text-2xl font-semibold lg:text-7xl text-[#0F67B1]  text-center mb-8">
             Tous les produits
           </h1>
           <div className="max-w-2xl mx-auto md:mt-16">
@@ -344,7 +339,7 @@ const ProductsPage: React.FC = () => {
       {/* Main Content */}
       <div className=" mx-auto px-4 py-8">
         {/* Mobile Filters */}
-        <div className="md:hidden mb-6 flex justify-center space-x-4">
+        <div className="md:hidden mb-6 flex justify-left space-x-4">
           <button
             onClick={() => {
               setMobileFilterType(
@@ -352,7 +347,7 @@ const ProductsPage: React.FC = () => {
               );
               setIsMobileFiltersOpen(mobileFilterType !== "brands");
             }}
-            className="flex items-center justify-center bg-white px-6 py-3 rounded-full shadow-sm text-[#0F67B1] border border-[#0F67B1]"
+            className="flex items-center justify-center   px-6 py-1 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
           >
             <span>Marques</span>
             <ChevronDown
@@ -369,7 +364,7 @@ const ProductsPage: React.FC = () => {
               );
               setIsMobileFiltersOpen(mobileFilterType !== "formats");
             }}
-            className="flex items-center justify-center bg-white px-6 py-3 rounded-full shadow-sm text-[#0F67B1] border border-[#0F67B1]"
+            className="flex items-center justify-center px-6 py-3 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
           >
             <span>Format</span>
             <ChevronDown
@@ -549,7 +544,7 @@ const ProductsPage: React.FC = () => {
               <div className="mt-6">
                 <button
                   onClick={() => {
-                    resetFilters();
+                    // Don't reset filters when applying - just close the filter panel
                     setIsMobileFiltersOpen(false);
                   }}
                   className="w-full bg-[#0F67B1] text-white py-3 px-4 rounded-full transition-colors duration-200 font-medium"
@@ -563,7 +558,7 @@ const ProductsPage: React.FC = () => {
           {/* Products Grid */}
           <div className="flex-1">
             {/* Results Count */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-3">
               <p className="text-gray-600">
                 {filteredProducts.length} produit
                 {filteredProducts.length !== 1 ? "s" : ""} trouvé
@@ -575,15 +570,32 @@ const ProductsPage: React.FC = () => {
                 searchQuery.trim()) && (
                 <button
                   onClick={resetFilters}
-                  className="text-[#0F67B1] hover:text-blue-700 text-sm font-medium flex items-center"
+                  className="bg-white text-[#0F67B1] hover:bg-blue-50 md:bg-transparent py-2 px-4 md:px-0 rounded-full md:rounded-none border border-[#0F67B1] md:border-0 text-sm font-medium flex items-center justify-center w-full md:w-auto shadow-sm md:shadow-none transition-colors"
                 >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2"
+                  >
+                    <path d="M3 2v6h6"></path>
+                    <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
+                    <path d="M21 22v-6h-6"></path>
+                    <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
+                  </svg>
                   Réinitialiser les filtres
                 </button>
               )}
             </div>
 
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6"
               variants={container}
               initial="hidden"
               whileInView="show"
