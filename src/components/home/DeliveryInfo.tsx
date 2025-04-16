@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import DeliveryImage from "../../assets/images/delivery-man.png";
+import { Link } from "@tanstack/react-router";
 
 const DeliveryInfo = () => {
   return (
@@ -20,14 +21,18 @@ const DeliveryInfo = () => {
               </span>
               <span className="hidden sm:inline">La livraison automatique</span>
             </h2>
-            <p className="mt-3  md:mt-6 max-w-full md:max-w-lg lg:max-w-[34rem] 2xl:max-w-[38rem]  text-md md:text-lg leading-relaxed relative z-20">
+            <p className="mt-3 my-6 md:mb-10  md:mt-12 max-w-full md:max-w-lg lg:max-w-[34rem] 2xl:max-w-[38rem]  text-md md:text-lg leading-relaxed relative z-20">
               Lorem ipsum dolor sit amet consectetur. Massa felis massa enim
               tristique. Lectus eget viverra nunc nisi risus mattis fusce eu.
               Blandit pellentesque lacus est ut ultrices.
             </p>
-            <button className="bg-white text-lg md:text-2xl mt-4 sm:mt-6 text-blue-700 font-medium py-1 md:py-3 px-6  md:px-10 lg:px-10 rounded-full hover:bg-gray-100 relative z-20">
+            <Link
+              to="/abonnement"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="bg-white text-lg md:text-2xl mt-12 text-blue-700 font-medium py-1 md:py-3 px-6  md:px-10 lg:px-10 rounded-full hover:bg-gray-100 relative z-20"
+            >
               Lorem ipsum
-            </button>
+            </Link>
           </motion.div>
 
           {/* Right Image - Positioned Over the Section */}
@@ -42,8 +47,8 @@ const DeliveryInfo = () => {
               <img
                 src={DeliveryImage}
                 alt="Delivery person"
-                className="relative md:absolute max-w-[100%] h-auto  mx-auto md:mx-0  top-[2rem] 
-                md:-top-[8rem] lg:-top-[12rem] xl:-top-[16.7rem] z-20"
+                className="relative md:absolute min-w-[100%] h-auto  mx-auto md:mx-0  top-[2rem] 
+                md:-top-[8rem] lg:-top-[12rem] xl:-top-[21.2rem] z-20"
               />
             </div>
           </motion.div>

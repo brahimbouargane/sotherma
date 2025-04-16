@@ -109,16 +109,16 @@ const Header = () => {
           <nav className="lg:hidden mt-4 pb-4">
             <div className="flex flex-col space-y-4">
               <Link
-                to="/products"
+                to="/produits"
                 className="text-[#37AFE1] hover:text-primary transition-colors"
               >
                 Nos Produits
               </Link>
               <Link
-                to="/products/category/large-bottles"
+                to="/abonnement"
                 className="text-[#37AFE1] hover:text-primary transition-colors"
               >
-                Catégories
+                Abonnement
               </Link>
               <Link
                 to="/blog"
@@ -127,10 +127,10 @@ const Header = () => {
                 Nos Actualités
               </Link>
               <Link
-                to="/about"
+                to="/contact"
                 className="text-[#37AFE1] hover:text-primary transition-colors"
               >
-                À propos
+                Contact
               </Link>
               <Link
                 to="/login"

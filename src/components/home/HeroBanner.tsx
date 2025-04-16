@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect } from "react";
-import Heroimage from "../../assets/images/mask-hero-seaction.png";
+import HeroimageDesktop from "../../assets/images/mask-hero-seaction.png";
+import HeroimageMobile from "../../assets/images/hero-original-image.png"; // Import mobile image
 import bottle5l from "../../assets/images/poducts/bottle-5l.png";
 import bottle1l from "../../assets/images/poducts/bottle-1l.png";
 import bottle105 from "../../assets/images/poducts/bottle-0.5l.png";
@@ -63,7 +64,7 @@ const HeroBanner = () => {
   }, [currentSlide]);
 
   return (
-    <section className="relative h-[90vh]  py-8 md:py-16 overflow-hidden">
+    <section className="relative h-[40vh] md:h-[90vh] py-8 lg:py-16 overflow-hidden">
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>
         <meta
@@ -73,16 +74,21 @@ const HeroBanner = () => {
       </Helmet>
 
       {/* Background Image */}
-      <div className="absolute h-full w-full top-0 left-0 z-0 ">
+      <div className="absolute  h-full w-full top-0 left-0 z-0 ">
         <img
-          src={Heroimage}
+          src={HeroimageDesktop}
           alt="Background"
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full hidden md:block rounded-3xl"
+        />
+        <img
+          src={HeroimageMobile}
+          alt="Background"
+          className="object-cover w-full h-full md:hidden rounded-3xl"
         />
       </div>
 
       {/* Carousel Content */}
-      <div className="relative z-10 h-full flex flex-col">
+      <div className="relative z-10 h-full w-full flex flex-col">
         <div className="flex-1 flex flex-col md:flex-row items-center py-8">
           {slides.map((slide, index) => (
             <div
@@ -93,35 +99,33 @@ const HeroBanner = () => {
               )}
             >
               {/* Left side - Product Image (30%) */}
-              <div className="relative flex justify-center items-center w-full md:w-[30%] h-[400px] md:h-[480px]">
-                {/* 5L Bottle - Left */}
+              <div className="relative  justify-center hidden lg:flex items-center w-full md:w-[30%] h-[400px] md:h-[480px]">
                 <img
                   src={bottle5l}
                   alt="5L Bottle"
-                  className="absolute left-24 bottom-0 w-[150px] md:w-[220px]"
+                  className="absolute lg:left-16 2xl:left-24 lg:-bottom-8 w-[150px] h-auto  md:w-[220px]"
                 />
 
-                {/* 1.5L Bottle - Center */}
                 <img
                   src={bottle1l}
                   alt="1.5L Bottle"
-                  className="relative left-[100px] bottom-16 w-[180px] md:w-[225px] z-10"
+                  className="relative lg:left-[120px] lg:bottom-4 w-[180px] h-auto md:w-[225px] z-10"
                 />
-
-                {/* 0.5L Bottle - Right */}
                 <img
                   src={bottle105}
                   alt="0.5L Bottle"
-                  className="absolute -right-4 bottom-2 w-[80px] md:w-[130px]"
+                  className="absolute lg:-right-20 2xl:-right-11 lg:-bottom-5 w-[80px] h-auto  md:w-[130px]"
                 />
               </div>
 
               {/* Right side - Text Content (70%) */}
-              <div className="w-full md:w-[60%] text-center md:text-left p-4 md:mb-20 md:pr-20">
+              <div className="w-full lg:w-[60%] text-center lg:text-left p-4 md:mb-20 lg:pr-20">
                 <p className="text-2xl  md:text-[65px] text-blue-800 mb-4 leading-tight">
                   {slide.title}
                 </p>
-                <p className="text-blue-700 md:text-lg">{slide.description}</p>
+                <p className="text-white md:text-blue-700 md:text-lg">
+                  {slide.description}
+                </p>
               </div>
             </div>
           ))}
@@ -130,7 +134,7 @@ const HeroBanner = () => {
         {/* Navigation Arrows */}
         <button
           onClick={goToPrevSlide}
-          className="absolute cursor-pointer left-2 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full border border-blue-800 flex items-center justify-center text-blue-800 hover:bg-white transition-colors z-20"
+          className="absolute hidden lg:flex cursor-pointer left-2 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full border border-blue-800  items-center justify-center text-blue-800 hover:bg-white transition-colors z-20"
           aria-label="Previous slide"
         >
           {/* <ChevronLeft className="w-6 h-6" /> */}
@@ -139,7 +143,7 @@ const HeroBanner = () => {
 
         <button
           onClick={goToNextSlide}
-          className="absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full border border-blue-800 flex items-center justify-center text-blue-800 hover:bg-white transition-colors z-20"
+          className="absolute hidden lg:flex cursor-pointer right-2 top-1/2 transform -translate-y-1/2 w-16 h-16 rounded-full border border-blue-800  items-center justify-center text-blue-800 hover:bg-white transition-colors z-20"
           aria-label="Next slide"
         >
           {/* <ChevronRight className="w-6 h-6" /> */}
@@ -147,11 +151,12 @@ const HeroBanner = () => {
         </button>
 
         {/* Slide Indicators */}
-        <div className="absolute bottom-0 right-8 flex items-center gap-2 z-20">
-          <span className="text-blue-800 font-medium text-2xl">
+        {/* <div className="absolute bottom-0 right-8 flex items-center gap-2 z-20"> */}
+        <div className="absolute bottom-0 left-1/2 lg:left-auto lg:right-8 transform -translate-x-1/2 lg:translate-x-0 flex items-center gap-2 z-20">
+          <span className="text-blue-800 font-medium text-xl md:text-2xl">
             {String(currentSlide + 1).padStart(2, "0")}
           </span>
-          <div className="w-36 h-1 bg-blue-200 rounded-full overflow-hidden">
+          <div className="w-20 md:w-36 h-1 bg-blue-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-blue-800 transition-all duration-500"
               style={{
@@ -159,7 +164,7 @@ const HeroBanner = () => {
               }}
             ></div>
           </div>
-          <span className="text-blue-800 font-medium text-2xl">
+          <span className="text-blue-800 font-medium text-xl md:text-2xl">
             {String(slides.length).padStart(2, "0")}
           </span>
         </div>

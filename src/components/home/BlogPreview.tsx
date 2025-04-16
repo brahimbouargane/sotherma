@@ -90,8 +90,8 @@ const BlogPreview = ({
               variants={item}
             >
               <Link
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 to={article.link}
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="block"
               >
                 <img
@@ -109,7 +109,13 @@ const BlogPreview = ({
                   <span className="font-sans">{article.date}</span>
                 </div>
 
-                <Link to={article.link} className="block">
+                <Link
+                  to={article.link}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
+                  className="block"
+                >
                   <h3 className="text-sm md:text-lg font-medium text-blue-600 mb-2 hover:text-blue-700 transition-colors">
                     {article.title}
                   </h3>
@@ -121,6 +127,9 @@ const BlogPreview = ({
 
                 <Link
                   to={article.link}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   className="text-blue-400 text-sm font-medium hover:text-blue-800 inline-flex  justify-center items-stretch"
                 >
                   Read more
@@ -136,6 +145,7 @@ const BlogPreview = ({
             <Link
               to={viewAllLink}
               className="inline-block text-white bg-blue-500 border border-primary text-primary font-medium py-2 px-6 rounded-full hover:bg-primary hover:text-white transition-colors"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               {viewAllText}
             </Link>

@@ -4,6 +4,7 @@ import product1 from "../../assets/images/poducts/product-1.png";
 import product2 from "../../assets/images/poducts/product-2.png";
 import product3 from "../../assets/images/poducts/product-3.png";
 import product4 from "../../assets/images/poducts/product-4.png";
+import { useEffect, useState } from "react";
 
 // Product type definition
 interface Product {
@@ -33,13 +34,33 @@ const item = {
 };
 
 const FeaturedProducts = () => {
+  // State to track screen size
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  // Check if we're on mobile view
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // Set breakpoint to md (768px)
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add listener for window resize
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+  const displayedProducts = isMobile ? products.slice(0, 3) : products;
+
   return (
     <section className="py-12 ">
       <div className="mx-auto">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Featured Product */}
+          {/* Featured Product - Hidden on mobile */}
           <motion.div
-            className=" relative rounded-3xl overflow-hidden bg-blue-50 aspect-[3/4]"
+            className="hidden md:block relative rounded-3xl overflow-hidden bg-blue-50 aspect-[3/4]"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -52,18 +73,18 @@ const FeaturedProducts = () => {
             />
           </motion.div>
 
-          {/* Products Grid */}
+          {/* Products Grid - 3 columns on mobile, 4 on desktop */}
           <motion.div
-            className="md:w-3/4 grid grid-cols-2 md:grid-cols-4 gap-6 mx-auto"
+            className="w-full md:w-3/4 grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 mx-auto"
             variants={container}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
           >
-            {products.map((product) => (
+            {displayedProducts.map((product) => (
               <motion.div
                 key={product.id}
-                className="bg-white rounded-lg p-4 flex flex-col items-center  h-full"
+                className="rounded-lg p-3 md:p-4 flex flex-col items-center h-full"
                 variants={item}
               >
                 {/* Product Image */}
@@ -71,13 +92,13 @@ const FeaturedProducts = () => {
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
-                    className=" h-auto max-h-[380px] object-cover object-center rounded-md"
+                    className="h-auto max-h-[280px] md:max-h-[380px] object-cover object-center rounded-md"
                   />
                 </div>
 
                 {/* Product Name & Description */}
-                <div className="flex-1 text-center font-sans mt-10">
-                  <h3 className="text-blue-700 font-semibold text-base uppercase">
+                <div className="flex-1 text-center font-sans mt-6 md:mt-10">
+                  <h3 className="text-blue-700 font-semibold text-sm md:text-base uppercase">
                     {product.name}
                   </h3>
                   <p className="text-gray-500 text-xs mt-1">
@@ -87,11 +108,11 @@ const FeaturedProducts = () => {
 
                 {/* Price & Add Button */}
                 <div className="w-full mt-auto text-center">
-                  <p className="text-gray-900 font-medium mb-4 text-lg">
+                  <p className="text-gray-900 font-medium mb-3 md:mb-4 text-base md:text-lg">
                     {product.price.toFixed(2)}{" "}
                     <span className="text-xs">DH</span>
                   </p>
-                  <button className="w-2/5 bg-blue-500 text-white hover:bg-primary/75 text-base py-2 px-0 rounded-full">
+                  <button className="w-full md:w-2/5 cursor-pointer bg-blue-500 text-white hover:bg-primary/75 text-xs md:text-base py-1.5 md:py-2 px-0 rounded-full">
                     Ajouter
                   </button>
                 </div>
