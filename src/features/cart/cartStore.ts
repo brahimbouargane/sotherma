@@ -1,4 +1,3 @@
-// src/features/cart/cartStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -7,6 +6,7 @@ export interface CartItem {
   id: string;
   name: string;
   price: number;
+  pack: string;
   image: string;
   quantity: number;
 }
@@ -63,12 +63,12 @@ export const useCartStore = create<CartState>()(
       // Clear all items from cart
       clearCart: () => set({ items: [] }),
 
-      // Calculate total items count
+      // Calculate total items count - using a getter to always have fresh data
       get cartItemsCount() {
         return get().items.reduce((total, item) => total + item.quantity, 0);
       },
 
-      // Calculate total price
+      // Calculate total price - using a getter to always have fresh data
       get totalPrice() {
         return get().items.reduce(
           (total, item) => total + item.price * item.quantity,

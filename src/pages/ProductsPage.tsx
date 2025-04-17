@@ -8,9 +8,10 @@ import product1 from "../assets/images/poducts/sais-bottle-05.png";
 import product2 from "../assets/images/poducts/product-2.png";
 import product3 from "../assets/images/poducts/product-3.png";
 import product4 from "../assets/images/poducts/product-4.png";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../features/cart/hooks/useCart";
 
-// Define TypeScript interfaces
+/// Define TypeScript interfaces
 interface Product {
   id: number;
   name: string;
@@ -178,15 +179,27 @@ const formatMap: Record<string, string> = {
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
+  isInCart: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  const [showAdded, setShowAdded] = useState(false);
+
+  const handleAddToCart = () => {
+    onAddToCart(product);
+    setShowAdded(true);
+
+    // Reset after 1 second
+    setTimeout(() => {
+      setShowAdded(false);
+    }, 1000);
+  };
   return (
     <motion.div
-      className="p-4 flex flex-col items-center h-full  rounded-3xl  hover:shadow-md transition-shadow duration-300"
+      className="p-4 flex flex-col items-center h-full rounded-3xl hover:shadow-md transition-shadow duration-300"
       variants={item}
     >
-      <div className="relative w-full h-48  lg:h-64 flex items-center justify-center">
+      <div className="relative w-full h-48 lg:h-64 flex items-center justify-center">
         <img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
@@ -206,10 +219,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           {product.price.toFixed(2)} <span className="text-xs">DH</span>
         </p>
         <button
-          className="w-full md:w-2/5 bg-blue-500 text-white hover:bg-blue-600 text-base py-2 px-0 rounded-full transition-colors duration-300"
-          onClick={() => onAddToCart(product)}
+          className={`w-full md:w-2/5 ${
+            showAdded
+              ? "bg-green-500 hover:bg-green-600"
+              : "bg-blue-500 hover:bg-blue-600"
+          } text-white text-base py-2 px-0 rounded-full transition-colors duration-300`}
+          onClick={handleAddToCart}
         >
-          Ajouter
+          {showAdded ? "Ajouté ✓" : "Ajouter"}
         </button>
       </div>
     </motion.div>
@@ -227,11 +244,45 @@ const ProductsPage: React.FC = () => {
     "brands" | "formats" | null
   >(null);
 
-  // Function to add to cart
-  const addToCart = (product: Product) => {
-    console.log("Added to cart:", product);
-    // Here you would normally dispatch an action to your cart state manager
-    alert(`${product.name} ajouté au panier`);
+  // Get cart functions from our hook
+  const { addToCart, hasItem, items } = useCart();
+
+  // State for notification
+  const [notification, setNotification] = useState<{
+    message: string;
+    visible: boolean;
+  }>({
+    message: "",
+    visible: false,
+  });
+
+  // Function to add product to cart
+  const handleAddToCart = (product: Product) => {
+    console.log("Adding product to cart:", product);
+
+    // Convert the Product to CartItem format
+    addToCart({
+      id: product.id.toString(),
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      pack: product.description,
+      quantity: 1,
+    });
+
+    // Verify the cart after adding
+    console.log("Cart after adding:", items);
+
+    // Show notification
+    setNotification({
+      message: `${product.name} ajouté au panier`,
+      visible: true,
+    });
+
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setNotification((prev) => ({ ...prev, visible: false }));
+    }, 3000);
   };
 
   // Memoize the filter function to avoid unnecessary recalculations
@@ -306,8 +357,39 @@ const ProductsPage: React.FC = () => {
     setMobileFilterType(null);
   };
 
+  // Check if product is in cart
+  const checkIfInCart = (productId: number) => {
+    return hasItem(productId.toString());
+  };
+
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
+      {/* Notification Toast */}
+      <AnimatePresence>
+        {notification.visible && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {notification.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Hero Section */}
       <div className="relative bg-blue-50 py-12 h-[40vh] overflow-hidden rounded-3xl">
         <div className="absolute inset-0 z-0">
@@ -317,8 +399,8 @@ const ProductsPage: React.FC = () => {
             className="object-cover h-full w-full"
           />
         </div>
-        <div className=" mt-10 md:mt-14 mx-auto px-4 relative z-10">
-          <h1 className="text-2xl font-semibold lg:text-7xl text-[#0F67B1]  text-center mb-8">
+        <div className="mt-10 md:mt-14 mx-auto px-4 relative z-10">
+          <h1 className="text-2xl font-semibold lg:text-7xl text-[#0F67B1] text-center mb-8">
             Tous les produits
           </h1>
           <div className="max-w-2xl mx-auto md:mt-16">
@@ -337,7 +419,7 @@ const ProductsPage: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className=" mx-auto px-4 py-8">
+      <div className="mx-auto px-4 py-8">
         {/* Mobile Filters */}
         <div className="md:hidden mb-6 flex justify-left space-x-4">
           <button
@@ -347,7 +429,7 @@ const ProductsPage: React.FC = () => {
               );
               setIsMobileFiltersOpen(mobileFilterType !== "brands");
             }}
-            className="flex items-center justify-center   px-6 py-1 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
+            className="flex items-center justify-center px-6 py-1 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
           >
             <span>Marques</span>
             <ChevronDown
@@ -479,7 +561,7 @@ const ProductsPage: React.FC = () => {
 
           {/* Mobile Filters Dropdown */}
           {isMobileFiltersOpen && (
-            <div className="md:hidden w-full  p-6 mb-6">
+            <div className="md:hidden w-full p-6 mb-6">
               {mobileFilterType === "brands" && (
                 <div>
                   <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
@@ -608,7 +690,8 @@ const ProductsPage: React.FC = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onAddToCart={addToCart}
+                  onAddToCart={handleAddToCart}
+                  isInCart={checkIfInCart(product.id)}
                 />
               ))}
             </motion.div>

@@ -48,7 +48,7 @@ const DeliveryInfo = () => {
                 src={DeliveryImage}
                 alt="Delivery person"
                 className="relative md:absolute min-w-[100%] h-auto  mx-auto md:mx-0  top-[2rem] 
-                md:-top-[8rem] lg:-top-[12rem] xl:-top-[21.2rem] z-20"
+                md:-top-[3rem] lg:-top-[10rem] xl:-top-[16rem]  2xl:-top-[21.2rem] z-20"
               />
             </div>
           </motion.div>

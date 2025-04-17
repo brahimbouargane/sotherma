@@ -127,7 +127,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
         />
       </Helmet>
       {/* Background Image - Conditional rendering based on screen size */}
-      <div className="absolute h-full md:h-[90vh] w-full top-0 left-0 z-0 ">
+      <div className="absolute h-full w-full top-0 left-0 z-0 ">
         <img
           src={isMobile ? HeroimageMobile : Heroimage}
           alt="Mountain landscape"
