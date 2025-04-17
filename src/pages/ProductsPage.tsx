@@ -457,7 +457,7 @@ const ProductsPage: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar - Desktop */}
           <div className="hidden lg:block w-80 shrink-0">
             <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
@@ -640,7 +640,7 @@ const ProductsPage: React.FC = () => {
           {/* Products Grid */}
           <div className="flex-1">
             {/* Results Count */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-3">
+            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 gap-3">
               <p className="text-gray-600">
                 {filteredProducts.length} produit
                 {filteredProducts.length !== 1 ? "s" : ""} trouvé

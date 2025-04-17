@@ -278,7 +278,7 @@ const Header = () => {
               />
             </div>
             {/* Login / Sign Up */}
-            <div className="hidden md:flex items-center space-x-3">
+            <div className="hidden lg:flex items-center space-x-3">
               <Link
                 to="/login"
                 className="text-lg text-[#37AFE1] hover:text-blue-800 font-normal transition-colors"
@@ -297,7 +297,7 @@ const Header = () => {
             {/* Hamburger/X Button with Animation */}
             <button
               type="button"
-              className="md:hidden p-2 z-50 relative"
+              className="lg:hidden p-2 z-50 relative"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
