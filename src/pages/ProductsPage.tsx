@@ -421,7 +421,7 @@ const ProductsPage: React.FC = () => {
       {/* Main Content */}
       <div className="mx-auto px-4 py-8">
         {/* Mobile Filters */}
-        <div className="md:hidden mb-6 flex justify-left space-x-4">
+        <div className="lg:hidden mb-6 flex justify-left space-x-4">
           <button
             onClick={() => {
               setMobileFilterType(
@@ -459,7 +459,7 @@ const ProductsPage: React.FC = () => {
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Filters Sidebar - Desktop */}
-          <div className="hidden md:block w-80 shrink-0">
+          <div className="hidden lg:block w-80 shrink-0">
             <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
               {/* Brands Filter */}
               <div className="mb-8">
@@ -561,7 +561,7 @@ const ProductsPage: React.FC = () => {
 
           {/* Mobile Filters Dropdown */}
           {isMobileFiltersOpen && (
-            <div className="md:hidden w-full p-6 mb-6">
+            <div className="lg:hidden w-full p-6 mb-6">
               {mobileFilterType === "brands" && (
                 <div>
                   <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
@@ -677,7 +677,7 @@ const ProductsPage: React.FC = () => {
             </div>
 
             <motion.div
-              className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6"
+              className="grid grid-cols-3  lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6"
               variants={container}
               initial="hidden"
               whileInView="show"
