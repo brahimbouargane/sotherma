@@ -47,7 +47,7 @@ export default function CartDropdown({ isOpen, onClose }: CartDropdownProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ type: "spring", damping: 25 }}
-            className="absolute -right-10 md:-right-36 lg:-right-40 mt-2 w-[22rem] md:w-[28rem] bg-[#f5fafa] rounded-3xl px-2.5 py-1.5 shadow-2xl z-50 overflow-hidden"
+            className="absolute -right-14 md:-right-36 lg:-right-40 mt-2 w-[22rem] md:w-[28rem] bg-[#f5fafa] rounded-3xl px-2.5 py-1.5 shadow-2xl z-50 overflow-hidden"
           >
             <div className="p-4 flex justify-between items-center">
               <h2 className="text-lg font-medium text-gray-800">Panier</h2>
