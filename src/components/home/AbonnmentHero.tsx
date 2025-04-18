@@ -59,7 +59,7 @@ const AbonnmentHero: React.FC<AbonnmentHeroProps> = ({ className }) => {
 
   return (
     <div
-      className={`relative min-h-[85vh] rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden ${className}`}
+      className={`relative min-h-[90vh]  mt-16 md:mt-20 rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl overflow-hidden ${className}`}
     >
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>
@@ -78,7 +78,7 @@ const AbonnmentHero: React.FC<AbonnmentHeroProps> = ({ className }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 pt-8  md:pt-20 lg:pt-28 px-4 container mx-auto">
+      <div className="relative z-10 pt-8  md:pt-20 lg:pt-32 px-4 container mx-auto">
         <motion.h2
           className="text-2xl md:text-4xl lg:text-5xl xl:text-7xl font-semibold text-blue-700 text-center mb-2 sm:mb-3 md:mb-4"
           initial={{ opacity: 0, y: -20 }}

@@ -7,3 +7,9 @@
 body {
   background-color: #f6ffff;
 }
+
+@theme {
+  --font-display: "familay Raleway", "sans-serif";
+  --color-primary-default: #0f67b1;
+  --background-primary-default: #37afe1;
+}

@@ -121,7 +121,7 @@ function BlogPage() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen  mt-16 md:mt-20">
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>
         <meta

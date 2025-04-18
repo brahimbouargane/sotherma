@@ -131,7 +131,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className, onSubmit }) => {
 
   return (
     <section
-      className={`relative min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
+      className={`relative  mt-16 md:mt-20 min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
     >
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>

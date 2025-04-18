@@ -391,7 +391,7 @@ const ProductsPage: React.FC = () => {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <div className="relative bg-blue-50 py-12 h-[40vh] overflow-hidden rounded-3xl">
+      <div className="relative bg-blue-50 mt-16 md:mt-20 py-12 h-[40vh] overflow-hidden rounded-3xl">
         <div className="absolute inset-0 z-0">
           <img
             src={banner}

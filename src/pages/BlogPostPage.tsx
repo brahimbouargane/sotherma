@@ -123,7 +123,7 @@ function BlogPostPage() {
 
   return (
     <>
-      <div className="min-h-screen mt-6 md:mt-12">
+      <div className="min-h-screen mt-16 md:mt-20">
         {/* SEO */}
         <Helmet>
           <title>{post.title} | Ain Saiss Blog</title>

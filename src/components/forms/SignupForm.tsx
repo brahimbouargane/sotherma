@@ -116,9 +116,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
   };
 
   return (
-    <div
-      className={`relative min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
-    >
+    <>
       <Helmet>
         <title>Ain Saiss | Eau Minérale Naturelle</title>
         <meta
@@ -126,173 +124,181 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
           content="Eau minérale naturelle pour une meilleure récupération pendant et après l'effort."
         />
       </Helmet>
-      {/* Background Image - Conditional rendering based on screen size */}
-      <div className="absolute h-full w-full top-0 left-0 z-0 ">
-        <img
-          src={isMobile ? HeroimageMobile : Heroimage}
-          alt="Mountain landscape"
-          className="w-full h-full object-cover object-center rounded-3xl"
-        />
-      </div>
-
-      {/* Form Container */}
-      <motion.div
-        className="bg-white z-10 relative w-[95%] max-w-xl mx-auto rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 md:mt-4 mt-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <div
+        className={`relative mt-16 md:mt-20  min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
       >
-        <h2 className="text-2xl md:text-5xl text-blue-700 text-center font-normal mb-1 sm:mb-2">
-          Inscription
-        </h2>
-        <p className="text-sm md:text-lg text-gray-600 text-center mb-4 sm:mb-6">
-          Créez votre compte en quelques clics !
-        </p>
+        {/* Background Image - Conditional rendering based on screen size */}
+        <div className="absolute h-full w-full top-0 left-0 z-0 ">
+          <img
+            src={isMobile ? HeroimageMobile : Heroimage}
+            alt="Mountain landscape"
+            className="w-full h-full object-cover object-center rounded-3xl"
+          />
+        </div>
 
-        <form className="px-1 sm:px-2 pt-2 sm:pt-4" onSubmit={handleSubmit}>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-3 sm:mb-4">
-            <div className="flex-1">
-              <label
-                htmlFor="nom"
-                className="block text-gray-700 text-sm sm:text-base mb-1"
-              >
-                Nom*
-              </label>
-              <input
-                type="text"
-                id="nom"
-                name="nom"
-                value={formData.nom}
-                onChange={handleChange}
-                className={`w-full px-3 sm:px-4 py-2 border ${
-                  errors.nom ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-              {errors.nom && (
-                <p className="text-red-500 text-xs sm:text-sm">{errors.nom}</p>
-              )}
+        {/* Form Container */}
+        <motion.div
+          className="bg-white z-10 relative w-[95%] max-w-xl mx-auto rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 md:mt-4 mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-2xl md:text-5xl text-blue-700 text-center font-normal mb-1 sm:mb-2">
+            Inscription
+          </h2>
+          <p className="text-sm md:text-lg text-gray-600 text-center mb-4 sm:mb-6">
+            Créez votre compte en quelques clics !
+          </p>
+
+          <form className="px-1 sm:px-2 pt-2 sm:pt-4" onSubmit={handleSubmit}>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-3 sm:mb-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="nom"
+                  className="block text-gray-700 text-sm sm:text-base mb-1"
+                >
+                  Nom*
+                </label>
+                <input
+                  type="text"
+                  id="nom"
+                  name="nom"
+                  value={formData.nom}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2 border ${
+                    errors.nom ? "border-red-500" : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                />
+                {errors.nom && (
+                  <p className="text-red-500 text-xs sm:text-sm">
+                    {errors.nom}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex-1">
+                <label
+                  htmlFor="prenom"
+                  className="block text-gray-700 text-sm sm:text-base mb-1"
+                >
+                  Prénom
+                </label>
+                <input
+                  type="text"
+                  id="prenom"
+                  name="prenom"
+                  value={formData.prenom}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2 border ${
+                    errors.prenom ? "border-red-500" : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                />
+                {errors.prenom && (
+                  <p className="text-red-500 text-xs sm:text-sm">
+                    {errors.prenom}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="flex-1">
+            <div className="mb-3 sm:mb-4">
               <label
-                htmlFor="prenom"
+                htmlFor="email"
                 className="block text-gray-700 text-sm sm:text-base mb-1"
               >
-                Prénom
+                Email*
               </label>
               <input
-                type="text"
-                id="prenom"
-                name="prenom"
-                value={formData.prenom}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 className={`w-full px-3 sm:px-4 py-2 border ${
-                  errors.prenom ? "border-red-500" : "border-gray-300"
+                  errors.email ? "border-red-500" : "border-gray-300"
                 } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
               />
-              {errors.prenom && (
+              {errors.email && (
                 <p className="text-red-500 text-xs sm:text-sm">
-                  {errors.prenom}
+                  {errors.email}
                 </p>
               )}
             </div>
-          </div>
 
-          <div className="mb-3 sm:mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm sm:text-base mb-1"
-            >
-              Email*
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full px-3 sm:px-4 py-2 border ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs sm:text-sm">{errors.email}</p>
-            )}
-          </div>
-
-          <div className="mb-3 sm:mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm sm:text-base mb-1"
-            >
-              Mot de passe*
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full px-3 sm:px-4 py-2 border ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs sm:text-sm">
-                {errors.password}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4 sm:mb-6">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-gray-700 text-sm sm:text-base mb-1"
-            >
-              Confirmer le Mot de passe*
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`w-full px-3 sm:px-4 py-2 border ${
-                errors.confirmPassword ? "border-red-500" : "border-gray-300"
-              } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-xs sm:text-sm">
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-3 sm:gap-4">
-            <motion.button
-              type="submit"
-              className="w-full bg-blue-400 hover:bg-blue-500 text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-base transition-colors duration-300"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Créer mon compte
-            </motion.button>
-
-            <div className="text-center mt-3 sm:mt-4">
-              <p className="text-gray-600 text-xs sm:text-sm">
-                Vous avez déjà un compte ?{" "}
-                <a
-                  onClick={handleLogin}
-                  className="text-blue-600 hover:underline cursor-pointer ml-1 sm:ml-2"
-                >
-                  Connectez-vous
-                </a>
-              </p>
+            <div className="mb-3 sm:mb-4">
+              <label
+                htmlFor="password"
+                className="block text-gray-700 text-sm sm:text-base mb-1"
+              >
+                Mot de passe*
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={`w-full px-3 sm:px-4 py-2 border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs sm:text-sm">
+                  {errors.password}
+                </p>
+              )}
             </div>
-          </div>
-        </form>
-      </motion.div>
-    </div>
+
+            <div className="mb-4 sm:mb-6">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-gray-700 text-sm sm:text-base mb-1"
+              >
+                Confirmer le Mot de passe*
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`w-full px-3 sm:px-4 py-2 border ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs sm:text-sm">
+                  {errors.confirmPassword}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <motion.button
+                type="submit"
+                className="w-full bg-blue-400 hover:bg-blue-500 text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full text-sm sm:text-base transition-colors duration-300"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Créer mon compte
+              </motion.button>
+
+              <div className="text-center mt-3 sm:mt-4">
+                <p className="text-gray-600 text-xs sm:text-sm">
+                  Vous avez déjà un compte ?{" "}
+                  <a
+                    onClick={handleLogin}
+                    className="text-blue-600 hover:underline cursor-pointer ml-1 sm:ml-2"
+                  >
+                    Connectez-vous
+                  </a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
