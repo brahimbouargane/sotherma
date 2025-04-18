@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, Plus, Check } from "lucide-react";
 import banner from "../assets/images/banner-products.png";
 import saislogo from "../assets/images/brands/LogoAS.png";
 import sidihrazamlogo from "../assets/images/brands/sidihrazam-logo.png";
@@ -35,20 +35,37 @@ interface Format {
   name: string;
 }
 
-// Animation variants
+// Enhanced animation variants
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
+      delayChildren: 0.2,
     },
   },
 };
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20,
+    },
+  },
+  hover: {
+    y: -5,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+    },
+  },
 };
 
 // Static data for products
@@ -184,6 +201,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const [showAdded, setShowAdded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleAddToCart = () => {
     onAddToCart(product);
@@ -194,22 +212,71 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       setShowAdded(false);
     }, 1000);
   };
+
+  // Button animation variants
+  const buttonVariants = {
+    idle: { scale: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+    added: {
+      scale: [1, 1.2, 1],
+      backgroundColor: "#22c55e", // green-500
+      transition: {
+        duration: 0.5,
+        backgroundColor: { duration: 0.2 },
+      },
+    },
+  };
+
+  // Image animation variants
+  const imageVariants = {
+    hover: {
+      scale: 1.05,
+      transition: { duration: 0.3 },
+    },
+    idle: {
+      scale: 1,
+      transition: { duration: 0.3 },
+    },
+  };
+
   return (
     <motion.div
-      className="p-4 flex flex-col items-center h-full rounded-3xl hover:shadow-md transition-shadow duration-300"
+      className="p-4 flex flex-col items-center h-full rounded-3xl hover:shadow-md transition-shadow duration-300 "
       variants={item}
+      whileHover="hover"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="relative w-full h-48 lg:h-64 flex items-center justify-center">
-        <img
+      <div className="relative w-full h-48 lg:h-64 flex items-center justify-center overflow-hidden">
+        <motion.img
           src={product.image || "/placeholder.svg"}
           alt={product.name}
           className="max-h-full max-w-full object-contain"
+          variants={imageVariants}
+          animate={isHovered ? "hover" : "idle"}
         />
+
+        {/* New badge */}
+        {/* {product.new && (
+          <motion.div
+            className="absolute top-2 right-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 500, delay: 0.2 }}
+          >
+            NOUVEAU
+          </motion.div>
+        )} */}
       </div>
       <div className="flex-1 text-center font-sans mt-10 w-full">
-        <h3 className="text-blue-700 font-semibold text-base uppercase">
+        <motion.h3
+          className="text-blue-700 font-semibold text-base uppercase"
+          animate={isHovered ? { color: "#1d4ed8" } : { color: "#1e40af" }}
+          transition={{ duration: 0.3 }}
+        >
           {product.name}
-        </h3>
+        </motion.h3>
         <p className="text-gray-500 text-xs mt-1">{product.description}</p>
       </div>
 
@@ -218,22 +285,72 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         <p className="text-gray-900 font-medium mb-4 text-lg">
           {product.price.toFixed(2)} <span className="text-xs">DH</span>
         </p>
-        <button
-          className={`w-full md:w-2/5 ${
-            showAdded
-              ? "bg-green-500 hover:bg-green-600"
-              : "bg-blue-500 hover:bg-blue-600"
-          } text-white text-base py-2 px-0 rounded-full transition-colors duration-300`}
+        <motion.button
+          className="w-full md:w-2/5 cursor-pointer text-white text-base py-2 px-0 rounded-full"
+          initial={{ backgroundColor: "#3b82f6" }} // bg-blue-500
+          variants={buttonVariants}
+          animate={showAdded ? "added" : "idle"}
+          whileHover="hover"
+          whileTap="tap"
           onClick={handleAddToCart}
         >
-          {showAdded ? "Ajouté ✓" : "Ajouter"}
-        </button>
+          <AnimatePresence mode="wait">
+            {showAdded ? (
+              <motion.span
+                key="added"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex items-center justify-center"
+              >
+                Ajouté
+                <motion.span
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{
+                    type: "spring",
+                    damping: 10,
+                    stiffness: 300,
+                    delay: 0.1,
+                  }}
+                  className="ml-1"
+                >
+                  <Check size={16} />
+                </motion.span>
+              </motion.span>
+            ) : (
+              <motion.span
+                key="add"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="flex items-center justify-center"
+              >
+                Ajouter
+                <motion.span
+                  className="ml-1"
+                  animate={{ x: isHovered ? [0, 5, 0] : 0 }}
+                  transition={{
+                    repeat: isHovered ? Infinity : 0,
+                    repeatDelay: 1,
+                    duration: 0.5,
+                  }}
+                >
+                  <Plus size={16} />
+                </motion.span>
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </div>
     </motion.div>
   );
 };
 
 const ProductsPage: React.FC = () => {
+  const [isBrandsOpen, setIsBrandsOpen] = useState(true);
+  const [isFormatsOpen, setIsFormatsOpen] = useState(true);
+
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedFormats, setSelectedFormats] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -362,116 +479,255 @@ const ProductsPage: React.FC = () => {
     return hasItem(productId.toString());
   };
 
+  // Animation variants for page sections
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  // Notification toast variants
+  const toastVariants = {
+    initial: { opacity: 0, y: 50, scale: 0.8 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 20,
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: 50,
+      scale: 0.8,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  };
+
+  // Filter button variants
+  const filterButtonVariants = {
+    initial: { scale: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 },
+    active: {
+      backgroundColor: "#0d4f91",
+      color: "#ffffff",
+    },
+    inactive: {
+      backgroundColor: "#0F67B1",
+      color: "#ffffff",
+    },
+  };
+
   return (
-    <div className="min-h-screen">
+    <motion.div
+      className="min-h-screen"
+      initial="hidden"
+      animate="visible"
+      variants={fadeInUp}
+    >
       {/* Notification Toast */}
       <AnimatePresence>
         {notification.visible && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center"
+            variants={toastVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-3 rounded-3xl shadow-lg z-50 flex items-center"
           >
-            <svg
+            <motion.svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 mr-2"
               viewBox="0 0 20 20"
               fill="currentColor"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                rotate: [0, 15, -15, 0],
+              }}
+              transition={{
+                duration: 0.5,
+                times: [0, 0.2, 0.4, 0.6],
+              }}
             >
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                 clipRule="evenodd"
               />
-            </svg>
+            </motion.svg>
             {notification.message}
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Hero Section */}
-      <div className="relative bg-blue-50 mt-16 md:mt-20 py-12 h-[40vh] overflow-hidden rounded-3xl">
-        <div className="absolute inset-0 z-0">
+      <motion.div
+        className="relative bg-blue-50 mt-16 md:mt-20 py-12 h-[40vh] overflow-hidden rounded-3xl"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div
+          className="absolute inset-0 z-0"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
           <img
             src={banner}
             alt="Mountains background"
             className="object-cover h-full w-full"
           />
-        </div>
-        <div className="mt-10 md:mt-14 mx-auto px-4 relative z-10">
-          <h1 className="text-2xl font-semibold lg:text-7xl text-[#0F67B1] text-center mb-8">
+        </motion.div>
+        <motion.div
+          className="mt-10 md:mt-14 mx-auto px-4 relative z-10"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <motion.h1
+            className="text-2xl font-semibold lg:text-7xl text-[#0F67B1] text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
             Tous les produits
-          </h1>
-          <div className="max-w-2xl mx-auto md:mt-16">
+          </motion.h1>
+          <motion.div
+            className="max-w-2xl mx-auto md:mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
             <div className="relative">
-              <input
+              <motion.input
                 type="text"
                 placeholder="Rechercher un produit..."
                 className="w-full py-3 bg-white text-[#11459D] px-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F67B1] focus:border-transparent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                initial={{ width: "90%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                whileFocus={{ boxShadow: "0 0 0 3px rgba(15, 103, 177, 0.2)" }}
               />
-              <Search className="absolute right-3 top-3 text-[#11459D]" />
+              <motion.div
+                className="absolute right-3 top-3 text-[#11459D]"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8 }}
+                whileHover={{ scale: 1.1 }}
+              >
+                <Search />
+              </motion.div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* Main Content */}
       <div className="mx-auto px-4 py-8">
         {/* Mobile Filters */}
-        <div className="lg:hidden mb-6 flex justify-left space-x-4">
-          <button
+        <motion.div
+          className="lg:hidden mb-6 flex justify-left space-x-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
+          <motion.button
             onClick={() => {
               setMobileFilterType(
                 mobileFilterType === "brands" ? null : "brands"
               );
               setIsMobileFiltersOpen(mobileFilterType !== "brands");
             }}
-            className="flex items-center justify-center px-6 py-1 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
+            className="flex items-center justify-center px-6 py-1 rounded-full shadow-sm border border-[#0F67B1]"
+            variants={filterButtonVariants}
+            initial="initial"
+            animate={mobileFilterType === "brands" ? "active" : "inactive"}
+            whileHover="hover"
+            whileTap="tap"
           >
             <span>Marques</span>
-            <ChevronDown
-              className={`h-4 w-4 ml-2 transition-transform ${
-                mobileFilterType === "brands" ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+            <motion.div
+              animate={{ rotate: mobileFilterType === "brands" ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="ml-2"
+            >
+              <ChevronDown className="h-4 w-4" />
+            </motion.div>
+          </motion.button>
 
-          <button
+          <motion.button
             onClick={() => {
               setMobileFilterType(
                 mobileFilterType === "formats" ? null : "formats"
               );
               setIsMobileFiltersOpen(mobileFilterType !== "formats");
             }}
-            className="flex items-center justify-center px-6 py-3 rounded-full shadow-sm bg-[#0F67B1] text-[#fff] border border-[#0F67B1]"
+            className="flex items-center justify-center px-6 py-3 rounded-full shadow-sm border border-[#0F67B1]"
+            variants={filterButtonVariants}
+            initial="initial"
+            animate={mobileFilterType === "formats" ? "active" : "inactive"}
+            whileHover="hover"
+            whileTap="tap"
           >
             <span>Format</span>
-            <ChevronDown
-              className={`h-4 w-4 ml-2 transition-transform ${
-                mobileFilterType === "formats" ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-        </div>
+            <motion.div
+              animate={{ rotate: mobileFilterType === "formats" ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="ml-2"
+            >
+              <ChevronDown className="h-4 w-4" />
+            </motion.div>
+          </motion.button>
+        </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar - Desktop */}
-          <div className="hidden lg:block w-80 shrink-0">
-            <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <motion.div
+            className="hidden lg:block w-80 shrink-0"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="bg-white rounded-3xl shadow-sm p-6 mb-6">
               {/* Brands Filter */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
+              <motion.div
+                className="mb-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+              >
+                {/* Clickable header */}
+                <div
+                  className="flex items-center justify-between mb-4 cursor-pointer"
+                  onClick={() => setIsBrandsOpen(!isBrandsOpen)}
+                >
                   <h3 className="font-medium text-[#0F67B1] text-lg">
                     Marques
                   </h3>
-                  <svg
+                  <motion.svg
                     className="w-5 h-5 text-gray-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    animate={{ rotate: isBrandsOpen ? 0 : -180 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <path
                       strokeLinecap="round"
@@ -479,44 +735,93 @@ const ProductsPage: React.FC = () => {
                       strokeWidth={2}
                       d="M19 9l-7 7-7-7"
                     />
-                  </svg>
+                  </motion.svg>
                 </div>
-                <div className="space-y-5">
-                  {brands.map((brand) => (
-                    <div key={brand.id} className="flex items-center py-1">
-                      <input
-                        type="checkbox"
-                        id={`desktop-brand-${brand.id}`}
-                        checked={selectedBrands.includes(brand.id)}
-                        onChange={() => toggleBrand(brand.id)}
-                        className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
-                      />
-                      <label
-                        htmlFor={`desktop-brand-${brand.id}`}
-                        className="flex items-center"
-                      >
-                        <img
-                          src={brand.logo || "/placeholder.svg"}
-                          alt={brand.name}
-                          width={90}
-                          height={45}
-                          className="ml-10"
-                        />
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
+                {/* Content with animation */}
+                <AnimatePresence initial={false}>
+                  {isBrandsOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                      animate={{
+                        height: "auto",
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.3, ease: "easeOut" },
+                          opacity: { duration: 0.2, delay: 0.1 },
+                        },
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.3, ease: "easeIn" },
+                          opacity: { duration: 0.2 },
+                        },
+                      }}
+                    >
+                      <div className="space-y-5">
+                        {brands.map((brand, index) => (
+                          <motion.div
+                            key={brand.id}
+                            className="flex items-center py-1"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.4,
+                              delay: 0.5 + index * 0.1,
+                            }}
+                          >
+                            <motion.input
+                              type="checkbox"
+                              id={`desktop-brand-${brand.id}`}
+                              checked={selectedBrands.includes(brand.id)}
+                              onChange={() => toggleBrand(brand.id)}
+                              className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded-3xl"
+                              whileTap={{ scale: 1.2 }}
+                            />
+                            <motion.label
+                              htmlFor={`desktop-brand-${brand.id}`}
+                              className="flex items-center"
+                              whileHover={{ x: 5 }}
+                              transition={{ type: "spring", stiffness: 400 }}
+                            >
+                              <img
+                                src={brand.logo || "/placeholder.svg"}
+                                alt={brand.name}
+                                width={90}
+                                height={45}
+                                className="ml-10"
+                              />
+                            </motion.label>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
 
               {/* Formats Filter */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
+              <motion.div
+                className="mb-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+              >
+                {/* Clickable header */}
+                <div
+                  className="flex items-center justify-between mb-4 cursor-pointer"
+                  onClick={() => setIsFormatsOpen(!isFormatsOpen)}
+                >
                   <h3 className="font-medium text-[#0F67B1] text-lg">Format</h3>
-                  <svg
+                  <motion.svg
                     className="w-5 h-5 text-gray-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    animate={{ rotate: isFormatsOpen ? 0 : -180 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <path
                       strokeLinecap="round"
@@ -524,137 +829,236 @@ const ProductsPage: React.FC = () => {
                       strokeWidth={2}
                       d="M19 9l-7 7-7-7"
                     />
-                  </svg>
+                  </motion.svg>
                 </div>
-                <div className="space-y-5">
-                  {formats.map((format) => (
-                    <div key={format.id} className="flex items-center py-1">
-                      <input
-                        type="checkbox"
-                        id={`desktop-format-${format.id}`}
-                        checked={selectedFormats.includes(format.id)}
-                        onChange={() => toggleFormat(format.id)}
-                        className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
-                      />
-                      <label
-                        htmlFor={`desktop-format-${format.id}`}
-                        className="ml-3 text-base text-gray-700"
-                      >
-                        {format.name}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
+                {/* Content with animation */}
+                <AnimatePresence initial={false}>
+                  {isFormatsOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0, overflow: "hidden" }}
+                      animate={{
+                        height: "auto",
+                        opacity: 1,
+                        transition: {
+                          height: { duration: 0.3, ease: "easeOut" },
+                          opacity: { duration: 0.2, delay: 0.1 },
+                        },
+                      }}
+                      exit={{
+                        height: 0,
+                        opacity: 0,
+                        transition: {
+                          height: { duration: 0.3, ease: "easeIn" },
+                          opacity: { duration: 0.2 },
+                        },
+                      }}
+                    >
+                      <div className="space-y-5">
+                        {formats.map((format, index) => (
+                          <motion.div
+                            key={format.id}
+                            className="flex items-center py-1"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.4,
+                              delay: 0.8 + index * 0.1,
+                            }}
+                          >
+                            <motion.input
+                              type="checkbox"
+                              id={`desktop-format-${format.id}`}
+                              checked={selectedFormats.includes(format.id)}
+                              onChange={() => toggleFormat(format.id)}
+                              className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded-3xl"
+                              whileTap={{ scale: 1.2 }}
+                            />
+                            <motion.label
+                              htmlFor={`desktop-format-${format.id}`}
+                              className="ml-3 text-base text-gray-700"
+                              whileHover={{ x: 5 }}
+                              transition={{ type: "spring", stiffness: 400 }}
+                            >
+                              {format.name}
+                            </motion.label>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
 
               {/* Reset Filters Button (Desktop) */}
-              <div className="mt-8">
-                <button
+              <motion.div
+                className="mt-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.2 }}
+              >
+                <motion.button
                   onClick={resetFilters}
                   className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-full transition-colors duration-200 font-medium"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   Réinitialiser les filtres
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Mobile Filters Dropdown */}
-          {isMobileFiltersOpen && (
-            <div className="lg:hidden w-full p-6 mb-6">
-              {mobileFilterType === "brands" && (
-                <div>
-                  <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
-                    Marques
-                  </h3>
-                  <div className="space-y-5">
-                    {brands.map((brand) => (
-                      <div key={brand.id} className="flex items-center py-1">
-                        <input
-                          type="checkbox"
-                          id={`mobile-brand-${brand.id}`}
-                          checked={selectedBrands.includes(brand.id)}
-                          onChange={() => toggleBrand(brand.id)}
-                          className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
-                        />
-                        <label
-                          htmlFor={`mobile-brand-${brand.id}`}
-                          className="flex items-center"
+          <AnimatePresence>
+            {isMobileFiltersOpen && (
+              <motion.div
+                className="lg:hidden w-full p-6 mb-6 bg-white rounded-3xl shadow-sm"
+                initial={{ opacity: 0, height: 0, overflow: "hidden" }}
+                animate={{ opacity: 1, height: "auto", overflow: "visible" }}
+                exit={{ opacity: 0, height: 0, overflow: "hidden" }}
+                transition={{ duration: 0.3 }}
+              >
+                {mobileFilterType === "brands" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
+                      Marques
+                    </h3>
+                    <div className="space-y-5">
+                      {brands.map((brand, index) => (
+                        <motion.div
+                          key={brand.id}
+                          className="flex items-center py-1"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
                         >
-                          <img
-                            src={brand.logo || "/placeholder.svg"}
-                            alt={brand.name}
-                            width={90}
-                            height={45}
-                            className="ml-8"
+                          <motion.input
+                            type="checkbox"
+                            id={`mobile-brand-${brand.id}`}
+                            checked={selectedBrands.includes(brand.id)}
+                            onChange={() => toggleBrand(brand.id)}
+                            className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded-3xl"
+                            whileTap={{ scale: 1.2 }}
                           />
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                          <motion.label
+                            htmlFor={`mobile-brand-${brand.id}`}
+                            className="flex items-center"
+                            whileHover={{ x: 5 }}
+                          >
+                            <img
+                              src={brand.logo || "/placeholder.svg"}
+                              alt={brand.name}
+                              width={90}
+                              height={45}
+                              className="ml-8"
+                            />
+                          </motion.label>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
 
-              {mobileFilterType === "formats" && (
-                <div>
-                  <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
-                    Format
-                  </h3>
-                  <div className="space-y-5">
-                    {formats.map((format) => (
-                      <div key={format.id} className="flex items-center py-1">
-                        <input
-                          type="checkbox"
-                          id={`mobile-format-${format.id}`}
-                          checked={selectedFormats.includes(format.id)}
-                          onChange={() => toggleFormat(format.id)}
-                          className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded"
-                        />
-                        <label
-                          htmlFor={`mobile-format-${format.id}`}
-                          className="ml-3 text-base text-gray-700"
+                {mobileFilterType === "formats" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="font-medium text-[#0F67B1] text-lg mb-4">
+                      Format
+                    </h3>
+                    <div className="space-y-5">
+                      {formats.map((format, index) => (
+                        <motion.div
+                          key={format.id}
+                          className="flex items-center py-1"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
                         >
-                          {format.name}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                          <motion.input
+                            type="checkbox"
+                            id={`mobile-format-${format.id}`}
+                            checked={selectedFormats.includes(format.id)}
+                            onChange={() => toggleFormat(format.id)}
+                            className="h-5 w-5 text-[#0F67B1] focus:ring-[#0F67B1] border-gray-300 rounded-3xl"
+                            whileTap={{ scale: 1.2 }}
+                          />
+                          <motion.label
+                            htmlFor={`mobile-format-${format.id}`}
+                            className="ml-3 text-base text-gray-700"
+                            whileHover={{ x: 5 }}
+                          >
+                            {format.name}
+                          </motion.label>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
 
-              {/* Reset Filters Button (Mobile) */}
-              <div className="mt-6">
-                <button
-                  onClick={() => {
-                    // Don't reset filters when applying - just close the filter panel
-                    setIsMobileFiltersOpen(false);
-                  }}
-                  className="w-full bg-[#0F67B1] text-white py-3 px-4 rounded-full transition-colors duration-200 font-medium"
-                >
-                  Appliquer les filtres
-                </button>
-              </div>
-            </div>
-          )}
+                {/* Apply Filters Button (Mobile) */}
+                <motion.div className="mt-6">
+                  <motion.button
+                    onClick={() => {
+                      // Don't reset filters when applying - just close the filter panel
+                      setIsMobileFiltersOpen(false);
+                    }}
+                    className="w-full bg-[#0F67B1] text-white py-3 px-4 rounded-full transition-colors duration-200 font-medium"
+                    whileHover={{ scale: 1.02, backgroundColor: "#0d4f91" }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Appliquer les filtres
+                  </motion.button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Products Grid */}
-          <div className="flex-1">
+          <motion.div
+            className="flex-1"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             {/* Results Count */}
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 gap-3">
-              <p className="text-gray-600">
+            <motion.div
+              className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6 gap-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+            >
+              <motion.p
+                className="text-gray-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.5 }}
+              >
                 {filteredProducts.length} produit
                 {filteredProducts.length !== 1 ? "s" : ""} trouvé
                 {filteredProducts.length !== 1 ? "s" : ""}
-              </p>
+              </motion.p>
 
               {(selectedBrands.length > 0 ||
                 selectedFormats.length > 0 ||
                 searchQuery.trim()) && (
-                <button
+                <motion.button
                   onClick={resetFilters}
                   className="bg-white text-[#0F67B1] hover:bg-blue-50 md:bg-transparent py-2 px-4 md:px-0 rounded-full md:rounded-none border border-[#0F67B1] md:border-0 text-sm font-medium flex items-center justify-center w-full md:w-auto shadow-sm md:shadow-none transition-colors"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.6 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <svg
+                  <motion.svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
@@ -665,23 +1069,25 @@ const ProductsPage: React.FC = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className="mr-2"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 1, delay: 1, repeat: 0 }}
                   >
                     <path d="M3 2v6h6"></path>
                     <path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path>
                     <path d="M21 22v-6h-6"></path>
                     <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path>
-                  </svg>
+                  </motion.svg>
                   Réinitialiser les filtres
-                </button>
+                </motion.button>
               )}
-            </div>
+            </motion.div>
 
             <motion.div
-              className="grid grid-cols-3  lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6"
               variants={container}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
               key={`products-${selectedBrands.join("-")}-${selectedFormats.join(
                 "-"
               )}-${searchQuery}`}
@@ -697,22 +1103,37 @@ const ProductsPage: React.FC = () => {
             </motion.div>
 
             {filteredProducts.length === 0 && (
-              <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-                <p className="text-gray-500 mb-4">
+              <motion.div
+                className="text-center py-12 bg-white rounded-lg shadow-sm"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <motion.p
+                  className="text-gray-500 mb-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
                   Aucun produit ne correspond à votre recherche.
-                </p>
-                <button
+                </motion.p>
+                <motion.button
                   onClick={resetFilters}
                   className="bg-[#0F67B1] hover:bg-blue-600 text-white py-2 px-6 rounded-full transition-colors duration-200"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.4 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   Réinitialiser les filtres
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
