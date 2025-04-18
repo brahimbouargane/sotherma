@@ -51,31 +51,36 @@ const Header = () => {
   // Handle body scroll and mobile menu when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      // Completely disable all scrolling
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      document.documentElement.style.height = "100%";
-      document.body.style.height = "100%";
+      // Save the current scroll position
+      const scrollY = window.scrollY;
+
+      // Apply fixed positioning without changing the visual position
       document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
     } else {
-      // Re-enable scrolling
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-      document.documentElement.style.height = "auto";
-      document.body.style.height = "auto";
-      document.body.style.position = "static";
-      document.body.style.width = "auto";
+      // Get the scroll position from the body's top position
+      const scrollY = document.body.style.top
+        ? parseInt(document.body.style.top || "0", 10) * -1
+        : 0;
+
+      // Restore normal positioning and scrolling
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      // Restore scroll position
+      window.scrollTo(0, scrollY);
     }
 
+    // Cleanup function
     return () => {
-      // Clean up
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-      document.documentElement.style.height = "auto";
-      document.body.style.height = "auto";
-      document.body.style.position = "static";
-      document.body.style.width = "auto";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
 
