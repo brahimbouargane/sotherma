@@ -215,7 +215,7 @@ const Header = () => {
           </motion.div>
 
           {/* Navigation - Desktop */}
-          <nav className="hidden lg:flex items-center space-x-8 ml-28">
+          <nav className="hidden lg:flex items-center space-x-8 ml-40">
             {["Nos Produits", "Abonnement", "Nous Contacter"].map((item, i) => (
               <motion.div
                 key={item}
