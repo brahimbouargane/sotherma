@@ -401,7 +401,7 @@ const HeroBanner = () => {
 
   return (
     <section
-      className={`relative h-[40vh] md:h-[90vh] py-8 lg:py-16 rounded-xl mt-16 md:mt-20 transition-opacity duration-1000 ${
+      className={`relative h-[40vh] overflow-hidden md:h-[90vh] py-8 lg:py-16 rounded-xl mt-16 md:mt-20 transition-opacity duration-1000 ${
         isLoaded ? "opacity-100" : "opacity-0"
       }`}
     >
