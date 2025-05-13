@@ -614,26 +614,29 @@ export default function AccountPage() {
               <>
                 {customer?.addresses && customer.addresses.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {customer.addresses.map((address) => (
-                      <div
-                        key={address.id}
-                        className="border border-gray-200 rounded-lg p-4"
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-primary-default rounded-full">
-                            {address.addressType}
-                          </span>
-                        </div>
-
-                        <p className="font-medium mb-1">{address.street}</p>
-                        <p className="text-gray-600 text-sm">
-                          {address.zone.name}, {address.city.name}
-                        </p>
-                        <p className="text-gray-600 text-sm">
-                          {address.region.name}
-                        </p>
+                    {/* {customer.addresses.map((address) => ( */}
+                    <div
+                      key={customer.addresses[0].id}
+                      className="border border-gray-200 rounded-lg p-4"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-primary-default rounded-full">
+                          {customer.addresses[0].addressType}
+                        </span>
                       </div>
-                    ))}
+
+                      <p className="font-medium mb-1">
+                        {customer.addresses[0].street}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        {customer.addresses[0].zone.name},{" "}
+                        {customer.addresses[0].city.name}
+                      </p>
+                      <p className="text-gray-600 text-sm">
+                        {customer.addresses[0].region.name}
+                      </p>
+                    </div>
+                    {/* ))} */}
                   </div>
                 ) : (
                   <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg">

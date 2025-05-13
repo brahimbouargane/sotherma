@@ -97,43 +97,43 @@ export default function AddressSelection({
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {addresses.map((address) => (
-                  <div
-                    key={address.id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                      selectedAddressId === address.id
-                        ? "border-primary-default bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => onAddressSelect(address.id)}
-                  >
-                    <div className="flex items-start">
-                      <input
-                        type="radio"
-                        id={`address-${address.id}`}
-                        name="delivery-address"
-                        className="mt-1"
-                        checked={selectedAddressId === address.id}
-                        onChange={() => onAddressSelect(address.id)}
-                      />
-                      <div className="ml-3 flex-1">
-                        <p className="font-medium text-gray-900">
-                          {address.addressType}
-                        </p>
-                        <p className="text-gray-600 text-sm mt-1">
-                          {address.street}
-                          {address.houseNumber && (
-                            <span>, {address.houseNumber}</span>
-                          )}
-                          <br />
-                          {address.zone?.name}, {address.city?.name}
-                          <br />
-                          {address.region?.name}
-                        </p>
-                      </div>
+                {/* {addresses.map((address) => ( */}
+                <div
+                  key={addresses[0].id}
+                  className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                    selectedAddressId === addresses[0].id
+                      ? "border-primary-default bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
+                  }`}
+                  onClick={() => onAddressSelect(addresses[0].id)}
+                >
+                  <div className="flex items-start">
+                    <input
+                      type="radio"
+                      id={`address-${addresses[0].id}`}
+                      name="delivery-address"
+                      className="mt-1"
+                      checked={selectedAddressId === addresses[0].id}
+                      onChange={() => onAddressSelect(addresses[0].id)}
+                    />
+                    <div className="ml-3 flex-1">
+                      <p className="font-medium text-gray-900">
+                        {addresses[0].addressType}
+                      </p>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {addresses[0].street}
+                        {addresses[0].houseNumber && (
+                          <span>, {addresses[0].houseNumber}</span>
+                        )}
+                        <br />
+                        {addresses[0].zone?.name}, {addresses[0].city?.name}
+                        <br />
+                        {addresses[0].region?.name}
+                      </p>
                     </div>
                   </div>
-                ))}
+                </div>
+                {/* ))} */}
               </div>
             )}
           </motion.div>
