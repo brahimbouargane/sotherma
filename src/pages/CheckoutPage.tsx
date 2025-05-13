@@ -213,7 +213,7 @@ export default function CheckoutPage() {
         updatedCustomerData.addresses &&
         updatedCustomerData.addresses.length > 0
       ) {
-        setCustomerAddresses(updatedCustomerData.addresses);
+        setCustomerAddresses([updatedCustomerData.addresses[0]]);
         setSelectedAddressId(updatedCustomerData.addresses[0].id);
       } else {
         console.warn("No addresses found in updated customer data");
