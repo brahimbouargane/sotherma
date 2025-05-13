@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Heroimage from "../../assets/images/mask-hero-seaction.png";
-import HeroimageMobile from "../../assets/images/hero-original-image.png"; // Import mobile image
+import Heroimage from "../../assets/images/mask-hero-seaction.webp";
+import HeroimageMobile from "../../assets/images/hero-original-image.webp"; // Import mobile image
 import { Helmet } from "react-helmet-async";
 
 interface ContactFormProps {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import Heroimage from "../../assets/images/mask-hero-seaction.png";
-import HeroimageMobile from "../../assets/images/hero-original-image.png"; // Import mobile image
+import Heroimage from "../../assets/images/mask-hero-seaction.webp";
+import HeroimageMobile from "../../assets/images/hero-original-image.webp"; // Import mobile image
 import PercentIcon from "../../assets/icons/Bénéficiez.png";
 import TruckIcon from "../../assets/icons/Livraisonc.png";
 import BottleIcon from "../../assets/icons/eau.png";

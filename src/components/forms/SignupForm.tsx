@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Heroimage from "../../assets/images/mask-hero-seaction.png";
-import HeroimageMobile from "../../assets/images/hero-original-image.png"; // Import mobile image
+import Heroimage from "../../assets/images/mask-hero-seaction.webp";
+import HeroimageMobile from "../../assets/images/hero-original-image.webp";
 import { Helmet } from "react-helmet-async";
+import { Link } from "@tanstack/react-router";
+import authService from "../../lib/api/client";
+import { Eye, EyeOff } from "lucide-react"; // Import eye icons for password visibility
+
+interface RegisterData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  originWebsite: string;
+}
 
 interface SignupFormProps {
   className?: string;
@@ -10,38 +22,36 @@ interface SignupFormProps {
 }
 
 interface SignupData {
-  nom: string;
-  prenom: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
+  phoneNumber: string;
 }
 
-const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
+const SignupForm: React.FC<SignupFormProps> = ({ className }) => {
   const [formData, setFormData] = useState<SignupData>({
-    nom: "",
-    prenom: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
   });
 
   const [errors, setErrors] = useState<Partial<SignupData>>({});
   const [isMobile, setIsMobile] = useState<boolean>(false);
-
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Separate state for confirm password visibility
   // Check if device is mobile based on screen width
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Consider < 768px as mobile
+      setIsMobile(window.innerWidth < 768);
     };
 
-    // Initial check
     checkIfMobile();
-
-    // Add event listener for window resize
     window.addEventListener("resize", checkIfMobile);
-
-    // Clean up event listener
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
@@ -60,22 +70,34 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
       });
     }
   };
+  // Toggle password visibility - separate toggles for each field
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<SignupData> = {};
 
-    if (!formData.nom.trim()) {
-      newErrors.nom = "Le nom est requis";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "Le nom est requis";
     }
 
-    if (!formData.prenom.trim()) {
-      newErrors.prenom = "Le prénom est requis";
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Le prénom est requis";
     }
 
     if (!formData.email.trim()) {
       newErrors.email = "L'email est requis";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "L'email n'est pas valide";
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Le téléphone est requis";
     }
 
     if (!formData.password.trim()) {
@@ -95,24 +117,30 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
-      // Call the onSubmit prop if provided
-      if (onSubmit) {
-        onSubmit(formData);
+      try {
+        // Extract data and prepare for API
+        const { confirmPassword, ...formWithoutConfirm } = formData;
+
+        // Create the API payload matching RegisterData
+        const registerData: RegisterData = {
+          ...formWithoutConfirm,
+          originWebsite: "AIN_SAISS", // Add the required field
+        };
+
+        // Call the API with the proper format
+        await authService.register(registerData);
+
+        // Handle success - redirect to login
+        window.location.href = "/login";
+      } catch (error) {
+        console.error("Registration failed:", error);
+        // You might want to show an error message to the user
       }
-
-      // For demo purposes, log the form data
-      console.log("Signup submitted:", formData);
     }
-  };
-
-  const handleLogin = () => {
-    // Redirect to login page
-    console.log("Redirecting to login page");
-    // Use your routing solution here, e.g.: navigate('/login')
   };
 
   return (
@@ -125,7 +153,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
         />
       </Helmet>
       <div
-        className={`relative mt-16 md:mt-20  min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
+        className={`relative mt-16 md:mt-20 min-h-[90vh] w-full py-4 sm:py-6 md:py-8 lg:py-16 overflow-hidden ${className}`}
       >
         {/* Background Image - Conditional rendering based on screen size */}
         <div className="absolute h-full w-full top-0 left-0 z-0 ">
@@ -154,48 +182,48 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-3 sm:mb-4">
               <div className="flex-1">
                 <label
-                  htmlFor="nom"
+                  htmlFor="firstName"
                   className="block text-gray-700 text-sm sm:text-base mb-1"
                 >
                   Nom*
                 </label>
                 <input
                   type="text"
-                  id="nom"
-                  name="nom"
-                  value={formData.nom}
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
                   onChange={handleChange}
                   className={`w-full px-3 sm:px-4 py-2 border ${
-                    errors.nom ? "border-red-500" : "border-gray-300"
+                    errors.firstName ? "border-red-500" : "border-gray-300"
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 />
-                {errors.nom && (
+                {errors.firstName && (
                   <p className="text-red-500 text-xs sm:text-sm">
-                    {errors.nom}
+                    {errors.firstName}
                   </p>
                 )}
               </div>
 
               <div className="flex-1">
                 <label
-                  htmlFor="prenom"
+                  htmlFor="lastName"
                   className="block text-gray-700 text-sm sm:text-base mb-1"
                 >
-                  Prénom
+                  Prénom*
                 </label>
                 <input
                   type="text"
-                  id="prenom"
-                  name="prenom"
-                  value={formData.prenom}
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleChange}
                   className={`w-full px-3 sm:px-4 py-2 border ${
-                    errors.prenom ? "border-red-500" : "border-gray-300"
+                    errors.lastName ? "border-red-500" : "border-gray-300"
                   } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 />
-                {errors.prenom && (
+                {errors.lastName && (
                   <p className="text-red-500 text-xs sm:text-sm">
-                    {errors.prenom}
+                    {errors.lastName}
                   </p>
                 )}
               </div>
@@ -227,26 +255,70 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
 
             <div className="mb-3 sm:mb-4">
               <label
+                htmlFor="phoneNumber"
+                className="block text-gray-700 text-sm sm:text-base mb-1"
+              >
+                Téléphone*
+              </label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className={`w-full px-3 sm:px-4 py-2 border ${
+                  errors.phoneNumber ? "border-red-500" : "border-gray-300"
+                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              />
+              {errors.phoneNumber && (
+                <p className="text-red-500 text-xs sm:text-sm">
+                  {errors.phoneNumber}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-3 sm:mb-4">
+              <label
                 htmlFor="password"
                 className="block text-gray-700 text-sm sm:text-base mb-1"
               >
                 Mot de passe*
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-3 sm:px-4 py-2 border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-xs sm:text-sm">
-                  {errors.password}
-                </p>
-              )}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2 border ${
+                    errors.password ? "border-red-500" : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                />
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 right-3 flex items-center justify-center cursor-pointer z-10 pointer-events-auto"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <EyeOff
+                      size={18}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Hide password"
+                    />
+                  ) : (
+                    <Eye
+                      size={18}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Show password"
+                    />
+                  )}
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs sm:text-sm">
+                    {errors.password}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="mb-4 sm:mb-6">
@@ -256,16 +328,38 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
               >
                 Confirmer le Mot de passe*
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={`w-full px-3 sm:px-4 py-2 border ${
-                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
-                } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full px-3 sm:px-4 py-2 border ${
+                    errors.confirmPassword
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                />
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 right-3 flex items-center justify-center cursor-pointer z-10 pointer-events-auto"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff
+                      size={18}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Hide password"
+                    />
+                  ) : (
+                    <Eye
+                      size={18}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Show password"
+                    />
+                  )}
+                </div>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-red-500 text-xs sm:text-sm">
                   {errors.confirmPassword}
@@ -286,12 +380,12 @@ const SignupForm: React.FC<SignupFormProps> = ({ className, onSubmit }) => {
               <div className="text-center mt-3 sm:mt-4">
                 <p className="text-gray-600 text-xs sm:text-sm">
                   Vous avez déjà un compte ?{" "}
-                  <a
-                    onClick={handleLogin}
+                  <Link
+                    to="/login"
                     className="text-blue-600 hover:underline cursor-pointer ml-1 sm:ml-2"
                   >
                     Connectez-vous
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>

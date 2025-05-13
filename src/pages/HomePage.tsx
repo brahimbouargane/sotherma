@@ -3,12 +3,13 @@ import HeroBanner from "../components/home/HeroBanner";
 import CategorySection from "../components/home/CategorySection";
 import FeaturedProducts from "../components/home/FeaturedProducts";
 import BrandShowcase from "../components/home/BrandShowcase";
-import BlogPreview, { BlogPost } from "../components/home/BlogPreview";
+import BlogPreview from "../components/home/BlogPreview";
 import DeliveryInfo from "../components/home/DeliveryInfo";
+import { BlogPost } from "../types/blog.types";
 
-import blog1 from "../assets/images/blog/blog-1.png";
-import blog2 from "../assets/images/blog/blog-2.png";
-import blog3 from "../assets/images/blog/blog-3.png";
+import blog1 from "../assets/images/blog/blog-1.webp";
+import blog2 from "../assets/images/blog/blog-2.webp";
+import blog3 from "../assets/images/blog/blog-3.webp";
 
 const blogPosts: BlogPost[] = [
   {

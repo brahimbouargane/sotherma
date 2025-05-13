@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, TouchEvent } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
-import category1 from "../../assets/images/category/cat-1.png";
-import category2 from "../../assets/images/category/cat-2.png";
-import category3 from "../../assets/images/category/cat-3.png";
-import category4 from "../../assets/images/category/cat-4.png";
+import category1 from "../../assets/images/category/cat-1.webp";
+import category2 from "../../assets/images/category/cat-2.webp";
+import category3 from "../../assets/images/category/cat-3.webp";
+import category4 from "../../assets/images/category/cat-4.webp";
 import arrowright from "../../assets/icons/Arrow-right.svg";
 import arrowleft from "../../assets/icons/Arrow-left.svg";
 import { Link } from "@tanstack/react-router";

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import DeliveryImage from "../../assets/images/delivery-man.png";
+import DeliveryImage from "../../assets/images/delivery-man.webp";
 import { Link } from "@tanstack/react-router";
 
 const DeliveryInfo = () => {

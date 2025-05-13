@@ -20,6 +20,11 @@ import AbonnementPage from "./pages/Abonnement";
 import ContactPage from "./pages/ContactPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import AccountPage from "./pages/AccountPage";
+import OrdersPage from "./pages/OrdersPage";
+import OrderSuccessPage from "./pages/OrderSuccessPage";
+import Test from "./pages/testapi";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Create a context for the router
 type RouterContext = {
@@ -53,6 +58,27 @@ const abonnementRoute = new Route({
   path: "abonnement",
   component: AbonnementPage,
 });
+
+const accountRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "account",
+  component: () => (
+    <ProtectedRoute>
+      <AccountPage />
+    </ProtectedRoute>
+  ),
+});
+
+const ordersRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "account/orders",
+  component: () => (
+    <ProtectedRoute>
+      <OrdersPage />
+    </ProtectedRoute>
+  ),
+});
+
 const contactRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "contact",
@@ -94,6 +120,12 @@ const cartRoute = new Route({
   component: CartPage,
 });
 
+const orderSuccessRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: "order-success",
+  component: OrderSuccessPage,
+});
+
 const checkoutRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "checkout",
@@ -118,6 +150,12 @@ const blogPostRoute = new Route({
   component: BlogPostPage,
 });
 
+const test = new Route({
+  getParentRoute: () => rootRoute,
+  path: "/test",
+  component: Test,
+});
+
 const notFoundRoute = new Route({
   getParentRoute: () => rootRoute,
   path: "*",
@@ -139,6 +177,10 @@ const routeTree = rootRoute.addChildren([
   contactRoute,
   loginRoute,
   SignupRoute,
+  accountRoute,
+  orderSuccessRoute,
+  ordersRoute,
+  test,
   notFoundRoute,
 ]);
 
