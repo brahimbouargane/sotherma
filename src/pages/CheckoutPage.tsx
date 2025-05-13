@@ -108,7 +108,7 @@ export default function CheckoutPage() {
             setSelectedAddressId(sortedAddresses[0].id);
           }
 
-          setCustomerAddresses(data.addresses);
+          setCustomerAddresses([data.addresses[0]]);
         }
 
         setIsLoadingCustomer(false);
