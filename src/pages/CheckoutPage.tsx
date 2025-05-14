@@ -335,7 +335,7 @@ export default function CheckoutPage() {
           // Prepare payment parameters
           const formParams = [
             { name: "clientid", value: "600002672" },
-            { name: "amount", value: totalAmount.toString() },
+            { name: "amount", value: totalAmount },
             { name: "oid", value: tempOrderId },
             { name: "okUrl", value: `${window.location.origin}/order-success` },
             { name: "failUrl", value: `${window.location.origin}/checkout` },
