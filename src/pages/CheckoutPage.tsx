@@ -230,6 +230,7 @@ export default function CheckoutPage() {
       setIsLoadingAddresses(false);
     }
   };
+
   // Complete handlePlaceOrder function with both cash and card payment handling
   const handlePlaceOrder = async () => {
     if (!selectedAddressId) {
@@ -317,7 +318,7 @@ export default function CheckoutPage() {
           sessionStorage.setItem("pendingCartItems", JSON.stringify(items));
 
           // Calculate total amount
-          const totalAmount = Math.round(getTotalPrice() * 100);
+          const totalAmount = getTotalPrice();
 
           // Generate temporary order ID
           const tempOrderId = `TEMP-${Date.now()}-${Math.floor(
