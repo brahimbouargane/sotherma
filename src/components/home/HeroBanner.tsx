@@ -6,6 +6,12 @@ import HeroimageMobile from "../../assets/images/hero-original-image.webp";
 import bottle5l from "../../assets/images/poducts/bottle-5l.png";
 import bottle1l from "../../assets/images/poducts/bottle-1l.png";
 import bottle105 from "../../assets/images/poducts/bottle-0.5l.png";
+import ainsais5l from "../../assets/images/poducts/sais5.png";
+import ainsais1l from "../../assets/images/poducts/sais1.png";
+import ainsais05 from "../../assets/images/poducts/sais-05.png";
+import ghyat5l from "../../assets/images/poducts/ghayt5.png";
+import ghayt1l from "../../assets/images/poducts/ghayt1.png";
+import ghayt05 from "../../assets/images/poducts/ghayt-0.5.png";
 import arrowright from "../../assets/icons/Arrow-right.svg";
 import arrowleft from "../../assets/icons/Arrow-left.svg";
 import { cn } from "../../lib/utils";
@@ -18,6 +24,11 @@ const slides = [
     description:
       "Lorem ipsum dolor sit amet consectetur. Lobortis aliquet quis bibendum nec.",
     image: bottle5l,
+    bottles: {
+      large: bottle5l, // 5L bottle
+      medium: bottle1l, // 1L bottle
+      small: bottle105, // 0.5L bottle
+    },
   },
   {
     id: 2,
@@ -26,6 +37,11 @@ const slides = [
     description:
       "Lorem ipsum dolor sit amet consectetur. Lobortis aliquet quis bibendum nec.",
     image: bottle1l,
+    bottles: {
+      large: ainsais5l, // 5L bottle
+      medium: ainsais1l, // 1L bottle
+      small: ainsais05, // 0.5L bottle
+    },
   },
   {
     id: 3,
@@ -34,6 +50,11 @@ const slides = [
     description:
       "Lorem ipsum dolor sit amet consectetur. Lobortis aliquet quis bibendum nec.",
     image: bottle105,
+    bottles: {
+      large: ghyat5l, // 5L bottle
+      medium: ghayt1l, // 1L bottle
+      small: ghayt05, // 0.5L bottle
+    },
   },
 ];
 
@@ -188,16 +209,26 @@ const HeroBanner = () => {
                 )}
               >
                 {/* Left side - Product Image (30%) with animation - DISPLAY FIRST */}
+
                 <div
                   className={`relative justify-center hidden lg:flex items-center w-full md:w-[30%] h-[400px] md:h-[480px] transition-all duration-500 ${
                     isLoaded ? "animate-scaleIn" : ""
                   } ${currentSlide === index ? "opacity-100" : "opacity-0"}`}
                 >
+                  {/* Large bottle with custom dimensions per slide */}
                   <img
-                    src={bottle5l}
-                    alt="5L Bottle"
+                    src={slide.bottles.large}
+                    alt="Large Bottle"
                     className={cn(
-                      "absolute lg:left-16 2xl:left-24 lg:-bottom-8 w-[150px] h-auto md:w-[220px] transition-all duration-700",
+                      "absolute lg:left-16 2xl:left-24 lg:-bottom-8 transition-all duration-700",
+                      // Custom dimensions for each slide
+                      index === 0
+                        ? "w-[150px] h-auto md:w-[220px]"
+                        : index === 1
+                        ? "w-[140px] h-auto md:w-[220px] lg:bottom-0"
+                        : index === 2
+                        ? "w-[130px] h-auto md:w-[200px] lg:bottom-4"
+                        : "w-[150px] h-auto md:w-[220px]", // default fallback
                       isLoaded && index === 0 ? "animate-slideInFromLeft" : "",
                       currentSlide === index
                         ? "opacity-100 transform translate-y-0 rotate-0"
@@ -205,11 +236,20 @@ const HeroBanner = () => {
                     )}
                   />
 
+                  {/* Medium bottle with custom dimensions per slide */}
                   <img
-                    src={bottle1l}
-                    alt="1.5L Bottle"
+                    src={slide.bottles.medium}
+                    alt="Medium Bottle"
                     className={cn(
-                      "relative lg:left-[120px] lg:bottom-4 w-[180px] h-auto md:w-[225px] z-10 transition-all duration-700 delay-100",
+                      "relative lg:left-[120px] lg:bottom-4 z-10 transition-all duration-700 delay-100",
+                      // Custom dimensions for each slide
+                      index === 0
+                        ? "w-[180px] h-auto md:w-[225px]"
+                        : index === 1
+                        ? "w-[170px] h-auto md:w-[180px] "
+                        : index === 2
+                        ? "w-[160px] h-auto md:w-[180px] lg:bottom-6"
+                        : "w-[180px] h-auto md:w-[225px]", // default fallback
                       isLoaded && index === 0
                         ? "animate-slideInFromBottom"
                         : "",
@@ -219,11 +259,20 @@ const HeroBanner = () => {
                     )}
                   />
 
+                  {/* Small bottle with custom dimensions per slide */}
                   <img
-                    src={bottle105}
-                    alt="0.5L Bottle"
+                    src={slide.bottles.small}
+                    alt="Small Bottle"
                     className={cn(
-                      "absolute lg:-right-20 2xl:-right-11 lg:-bottom-5 w-[80px] h-auto md:w-[130px] transition-all duration-700 delay-200",
+                      "absolute lg:-right-20 2xl:-right-11 lg:-bottom-5 transition-all duration-700 delay-200",
+                      // Custom dimensions for each slide
+                      index === 0
+                        ? "w-[80px] h-auto md:w-[130px]"
+                        : index === 1
+                        ? "w-[75px] h-auto md:w-[110px] lg:bottom-0"
+                        : index === 2
+                        ? "w-[70px] h-auto md:w-[100px] lg:bottom-4"
+                        : "w-[80px] h-auto md:w-[130px]", // default fallback
                       isLoaded && index === 0 ? "animate-slideInFromRight" : "",
                       currentSlide === index
                         ? "opacity-100 transform translate-y-0 rotate-0"
